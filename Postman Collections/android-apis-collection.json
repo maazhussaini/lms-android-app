@@ -1,0 +1,45 @@
+{
+	"info": {
+		"_postman_id": "4ceea0f7-0abe-4275-ae9e-d2c613e94556",
+		"name": "Android Application",
+		"description": "The Android Application API collection provides endpoints for managing the core functionalities of the LMS mobile app on Android.\n\nThis includes secure video playback, user authentication, access control, push notifications, and data synchronization.\n\nThe APIs ensure optimal performance and security, leveraging native Android features and technologies such as Kotlin, ExoPlayer, EncryptedSharedPreferences, and Firebase Cloud Messaging (FCM).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User Authentication",
+			"item": [],
+			"id": "09660b21-565f-4784-a661-6d1a1a8c3179"
+		},
+		{
+			"name": "Video Playback",
+			"item": [],
+			"id": "5ad6df64-68c7-4043-a777-aeb103c1caad"
+		},
+		{
+			"name": "User Access Control",
+			"item": [],
+			"id": "fe9138e3-c220-4c41-8091-a64d72c9b423"
+		},
+		{
+			"name": "Data Storage & Sync",
+			"item": [],
+			"id": "12761de2-9900-4290-a195-3d0ba0cb29a8"
+		},
+		{
+			"name": "Push Notifications",
+			"item": [],
+			"id": "f3282ace-18dd-4141-a18a-b4b7416d220d"
+		},
+		{
+			"name": "Security Layer",
+			"item": [],
+			"id": "38c6d7d2-2525-4c58-87a7-26a4b6a3878c"
+		},
+		{
+			"name": "DRM License Acquisition",
+			"item": [],
+			"id": "e18dd38d-675a-43f3-b30e-995f04f9eed7"
+		}
+	]
+}
