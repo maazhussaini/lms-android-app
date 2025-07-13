@@ -112,6 +112,25 @@ class AuthRepositoryImpl @Inject constructor() : AuthRepository {
         currentUser = null
     }
 
+    override suspend fun resetPassword(newPassword: String): AuthResult<Unit> {
+        // Simulate network delay
+        delay(1000)
+
+        return try {
+            val email = currentUser ?: return AuthResult.Error("No user is currently logged in")
+            
+            // In a real app, we would update the password in the backend
+            val user = userDatabase[email] ?: return AuthResult.Error("User not found")
+            
+            // Update password
+            userDatabase[email] = user.copy(password = newPassword)
+            
+            AuthResult.Success(Unit)
+        } catch (e: Exception) {
+            AuthResult.Error(e.message ?: "Failed to reset password")
+        }
+    }
+
     // Data class to store user credentials in memory
     private data class UserCredentials(
         val email: String,

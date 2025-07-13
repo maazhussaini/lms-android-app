@@ -46,7 +46,15 @@ interface AuthRepository {
      * Logs out the current user.
      */
     suspend fun logout()
-    
+
+    /**
+     * Resets the user's password.
+     *
+     * @param newPassword The new password to set.
+     * @return [AuthResult] containing the success status and optional error message.
+     */
+    suspend fun resetPassword(newPassword: String): AuthResult<Unit>
+
     /**
      * Checks if a user is currently logged in.
      *

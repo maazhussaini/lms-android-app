@@ -15,6 +15,8 @@ import com.example.orb_ed.presentation.screens.auth.forgotpassword.ForgotPasswor
 import com.example.orb_ed.presentation.screens.auth.login.LoginScreen
 import com.example.orb_ed.presentation.screens.auth.login.LoginViewModel
 import com.example.orb_ed.presentation.screens.auth.otp.OtpVerificationScreen
+import com.example.orb_ed.presentation.screens.auth.resetpassword.ResetPasswordScreen
+import com.example.orb_ed.presentation.screens.auth.resetpassword.ResetPasswordViewModel
 import com.example.orb_ed.presentation.screens.auth.signup.SignUpViewModel
 import com.example.orb_ed.presentation.screens.auth.signup.SignupScreen
 import com.example.orb_ed.presentation.screens.home.HomeScreen
@@ -104,6 +106,18 @@ fun AppNavGraph(
                     }
                 },
                 onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable("reset-password") {
+            val viewModel: ResetPasswordViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsState()
+
+            ResetPasswordScreen(
+                uiState = uiState,
+                effect = viewModel.effect,
+                onIntent = viewModel::sendIntent,
+                onNavigateToLogin = { /* Handle navigation back to login */ }
             )
         }
 
