@@ -36,11 +36,11 @@ import androidx.compose.ui.unit.sp
 import com.example.orb_ed.R
 import com.example.orb_ed.presentation.components.CustomTextField
 import com.example.orb_ed.presentation.components.PrimaryButton
-import com.example.orb_ed.ui.theme.GreyBorderColor
-import com.example.orb_ed.ui.theme.GreySubtitleColor
-import com.example.orb_ed.ui.theme.LightPurpleBackgroundColor
-import com.example.orb_ed.ui.theme.OrbEdTheme
-import com.example.orb_ed.ui.theme.PrimaryColor
+import com.example.orb_ed.presentation.theme.GreyBorderColor
+import com.example.orb_ed.presentation.theme.GreySubtitleColor
+import com.example.orb_ed.presentation.theme.LightPurpleBackgroundColor
+import com.example.orb_ed.presentation.theme.OrbEdTheme
+import com.example.orb_ed.presentation.theme.PrimaryColor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 

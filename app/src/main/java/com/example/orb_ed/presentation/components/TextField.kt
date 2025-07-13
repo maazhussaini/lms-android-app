@@ -53,10 +53,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.orb_ed.R
 import com.example.orb_ed.presentation.theme.DisabledContainerColor
-import com.example.orb_ed.ui.theme.GreyBorderColor
-import com.example.orb_ed.ui.theme.GreyHintColor
-import com.example.orb_ed.ui.theme.GreyLabelColor
-import com.example.orb_ed.ui.theme.PrimaryColor
+import com.example.orb_ed.presentation.theme.GreyBorderColor
+import com.example.orb_ed.presentation.theme.GreyHintColor
+import com.example.orb_ed.presentation.theme.GreyLabelColor
+import com.example.orb_ed.presentation.theme.PrimaryColor
 
 @Preview(showBackground = true)
 @Composable

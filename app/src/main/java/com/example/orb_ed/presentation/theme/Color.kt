@@ -40,4 +40,5 @@ val GreyLabelColor = Color(0xFF2F3C42)
 val GreyHintColor = Color(0xFF63747D)
 val GreyBorderColor = Color(0xFFA0AFB7)
 val DisabledContainerColor = Color(0xFFF1F1F1)
+val LightPurpleBackgroundColor = Color(0xFFF7F3FF)
 

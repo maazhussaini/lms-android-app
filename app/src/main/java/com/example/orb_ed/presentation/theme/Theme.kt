@@ -6,7 +6,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.example.orb_ed.ui.theme.PrimaryColor
+import com.example.orb_ed.presentation.theme.PrimaryColor
 
 private val DarkColorScheme = darkColorScheme(
     primary = PrimaryColor,

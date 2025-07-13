@@ -18,13 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.orb_ed.ui.theme.LightPurpleBackgroundColor
-import com.example.orb_ed.ui.theme.OrbEdTheme
+import com.example.orb_ed.presentation.theme.LightPurpleBackgroundColor
+import com.example.orb_ed.presentation.theme.OrbEdTheme
 
 @Preview(showBackground = true)
 @Composable
 fun ButtonPreview() {
-    OrbEdTheme(dynamicColor = false) {
+    OrbEdTheme {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
