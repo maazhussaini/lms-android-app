@@ -85,7 +85,11 @@ fun CustomTextField(
     hint: String,
     showCountryPicker: Boolean = false,
     readOnly: Boolean = false,
-    trailingIcon: @Composable (() -> Unit)? = null
+    trailingIcon: @Composable (() -> Unit)? = null,
+    enabled: Boolean = true,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     Column(modifier = modifier) {
         Text(
@@ -137,45 +141,15 @@ fun CustomTextField(
                     )
                 }
 
-                /*OutlinedTextFieldWithCustomPadding(
-                    enabled = false,
-                    placeholder = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Image(
-                                modifier = Modifier.size(20.dp),
-                                painter = painterResource(id = R.drawable.flag_pk),
-                                contentDescription = null,
-                            )
-                            Spacer(Modifier.width(8.dp))
-                            Text(
-                                text = "+92",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = GreyHintColor,
-                            )
-
-                            Icon(
-                                modifier = Modifier.size(16.dp),
-                                imageVector = Icons.Default.KeyboardArrowDown,
-                                contentDescription = null
-                            )
-                        }
-
-                    },
-                    modifier = Modifier.wrapContentWidth(),
-                    textStyle = MaterialTheme.typography.labelMedium,
-                    value = "",
-                    onValueChange = onValueChange,
-                    colors = colors,
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
-                )*/
-
                 Spacer(Modifier.width(8.dp))
             }
 
 
             OutlinedTextFieldWithCustomPadding(
+                enabled = enabled,
+                keyboardActions = keyboardActions,
+                keyboardOptions = keyboardOptions,
+                visualTransformation = visualTransformation,
                 readOnly = readOnly,
                 suffix = trailingIcon,
                 placeholder = {

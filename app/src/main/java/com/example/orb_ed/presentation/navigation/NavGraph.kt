@@ -1,6 +1,9 @@
 package com.example.orb_ed.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -10,7 +13,7 @@ import androidx.navigation.navArgument
 import com.example.orb_ed.presentation.screens.auth.forgotpassword.ForgotPasswordScreen
 import com.example.orb_ed.presentation.screens.auth.login.LoginScreen
 import com.example.orb_ed.presentation.screens.auth.otp.OtpVerificationScreen
-import com.example.orb_ed.presentation.screens.auth.signup.SignUpScreen
+import com.example.orb_ed.presentation.screens.auth.signup.SignUpViewModel
 import com.example.orb_ed.presentation.screens.auth.signup.SignupScreen
 import com.example.orb_ed.presentation.screens.home.HomeScreen
 import com.example.orb_ed.presentation.screens.splash.SplashScreen
@@ -34,7 +37,7 @@ fun AppNavGraph(
                 onNavigateToHome = { navController.navigate(Screen.Home.route) }
             )
         }
-        
+
         // Login Screen
         composable(Screen.Login.route) {
             LoginScreen(
@@ -43,18 +46,22 @@ fun AppNavGraph(
                 onLoginSuccess = { navController.navigate(Screen.Home.route) }
             )
         }
-        
+
         // Sign Up Screen
         composable(Screen.SignUp.route) {
-            /*SignUpScreen(
-                onNavigateBack = { navController.popBackStack() },
-                onSignUpSuccess = { email ->
-                    navController.navigate(Screen.OtpVerification.createRoute(email))
-                }
-            )*/
-            SignupScreen()
+            val viewModel: SignUpViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsState()
+            val effect = viewModel.effect
+            SignupScreen(
+                uiState,
+                effect,
+                viewModel::sendIntent,
+                onNavigateToLogin = {
+                    navController.navigate(Screen.Login.route)
+                },
+                onNavigateToNextScreen = {})
         }
-        
+
         // Forgot Password Screen
         composable(Screen.ForgotPassword.route) {
             ForgotPasswordScreen(
@@ -64,7 +71,7 @@ fun AppNavGraph(
                 }
             )
         }
-        
+
         // OTP Verification Screen
         composable(
             route = Screen.OtpVerification.route,
@@ -77,13 +84,15 @@ fun AppNavGraph(
             val email = backStackEntry.arguments?.getString("email") ?: ""
             OtpVerificationScreen(
                 email = email,
-                onVerifySuccess = { navController.navigate(Screen.Login.route) {
-                    popUpTo(Screen.Login.route) { inclusive = true }
-                }},
+                onVerifySuccess = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                },
                 onNavigateBack = { navController.popBackStack() }
             )
         }
-        
+
         // Home Screen
         composable(Screen.Home.route) {
             HomeScreen(

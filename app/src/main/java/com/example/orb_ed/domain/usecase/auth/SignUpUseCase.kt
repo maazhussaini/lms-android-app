@@ -1,5 +1,6 @@
 package com.example.orb_ed.domain.usecase.auth
 
+import android.util.Patterns
 import com.example.orb_ed.domain.repository.AuthRepository
 import javax.inject.Inject
 
@@ -14,40 +15,52 @@ class SignUpUseCase @Inject constructor(
     /**
      * Executes the sign-up operation with the provided user details.
      *
-     * @param name The user's full name.
      * @param email The user's email address.
      * @param password The user's chosen password.
      * @param confirmPassword Confirmation of the user's password.
+     * @param phoneNumber The user's phone number.
+     * @param institution The user's institution name.
      * @return [AuthResult] containing the result of the sign-up operation.
      */
     suspend operator fun invoke(
-        name: String,
         email: String,
         password: String,
-        confirmPassword: String
+        confirmPassword: String,
+        phoneNumber: String,
+        institution: String
     ): AuthResult<Unit> {
         // Validate input
-        if (name.isBlank()) {
-            return AuthResult.Error("Name cannot be empty")
-        }
         if (email.isBlank()) {
             return AuthResult.Error("Email cannot be empty")
         }
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return AuthResult.Error("Please enter a valid email address")
-        }
-        if (password.length < 8) {
-            return AuthResult.Error("Password must be at least 8 characters long")
         }
         if (password != confirmPassword) {
             return AuthResult.Error("Passwords do not match")
         }
+        if (password.length < 6) {
+            return AuthResult.Error("Password must be at least 6 characters")
+        }
+        if (phoneNumber.isBlank()) {
+            return AuthResult.Error("Phone number cannot be empty")
+        }
+        if (!isValidPhoneNumber(phoneNumber)) {
+            return AuthResult.Error("Please enter a valid phone number")
+        }
+        if (institution.isBlank()) {
+            return AuthResult.Error("Institute cannot be empty")
+        }
         
         // Call repository to perform sign-up
-        return when (val result = authRepository.signUp(name, email, password)) {
-            is AuthResult.Success -> AuthResult.Success(Unit)
-            is AuthResult.Error -> result
-            is AuthResult.Loading -> AuthResult.Error("Unexpected loading state")
-        }
+        return authRepository.signUp(email, password, phoneNumber, institution)
+    }
+
+    private fun isValidPhoneNumber(phoneNumber: String): Boolean {
+        // Remove all non-digit characters
+        val digitsOnly = phoneNumber.filter { it.isDigit() }
+
+        // Check if it has at least 10 digits
+        return digitsOnly.length >= 10
     }
 }

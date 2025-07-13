@@ -23,7 +23,7 @@ interface AuthRepository {
      * @param password The user's password.
      * @return [AuthResult] containing the success status and optional error message.
      */
-    suspend fun signUp(name: String, email: String, password: String): AuthResult<Unit>
+    suspend fun signUp(email: String, password: String, phoneNumber: String, institution: String): AuthResult<Unit>
     
     /**
      * Sends a password reset OTP to the provided email address.
