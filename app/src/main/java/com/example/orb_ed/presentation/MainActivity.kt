@@ -25,7 +25,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun OrbEdApp() {
     OrbEdTheme {
-        // A surface container using the 'background' color from the theme
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background

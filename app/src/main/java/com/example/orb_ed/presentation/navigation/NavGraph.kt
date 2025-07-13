@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.orb_ed.presentation.screens.auth.forgotpassword.ForgotPasswordScreen
+import com.example.orb_ed.presentation.screens.auth.forgotpassword.ForgotPasswordViewModel
 import com.example.orb_ed.presentation.screens.auth.login.LoginScreen
 import com.example.orb_ed.presentation.screens.auth.login.LoginViewModel
 import com.example.orb_ed.presentation.screens.auth.otp.OtpVerificationScreen
@@ -71,7 +72,13 @@ fun AppNavGraph(
 
         // Forgot Password Screen
         composable(Screen.ForgotPassword.route) {
+            val viewModel: ForgotPasswordViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsState()
+            
             ForgotPasswordScreen(
+                uiState = uiState,
+                effect = viewModel.effect,
+                onIntent = viewModel::sendIntent,
                 onNavigateBack = { navController.popBackStack() },
                 onSendOtp = { email ->
                     navController.navigate(Screen.OtpVerification.createRoute(email))
