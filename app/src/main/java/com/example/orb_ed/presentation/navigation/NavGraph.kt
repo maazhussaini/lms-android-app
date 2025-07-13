@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.orb_ed.presentation.screens.auth.forgotpassword.ForgotPasswordScreen
 import com.example.orb_ed.presentation.screens.auth.login.LoginScreen
+import com.example.orb_ed.presentation.screens.auth.login.LoginViewModel
 import com.example.orb_ed.presentation.screens.auth.otp.OtpVerificationScreen
 import com.example.orb_ed.presentation.screens.auth.signup.SignUpViewModel
 import com.example.orb_ed.presentation.screens.auth.signup.SignupScreen
@@ -40,7 +41,13 @@ fun AppNavGraph(
 
         // Login Screen
         composable(Screen.Login.route) {
+            val viewModel: LoginViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsState()
+            val effect = viewModel.effect
             LoginScreen(
+                uiState = uiState,
+                effect = effect,
+                onIntent = viewModel::sendIntent,
                 onNavigateToSignUp = { navController.navigate(Screen.SignUp.route) },
                 onNavigateToForgotPassword = { navController.navigate(Screen.ForgotPassword.route) },
                 onLoginSuccess = { navController.navigate(Screen.Home.route) }
