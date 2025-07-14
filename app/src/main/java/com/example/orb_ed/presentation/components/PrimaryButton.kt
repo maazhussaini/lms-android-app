@@ -48,7 +48,8 @@ fun PrimaryButton(
     btnText: String,
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
-    onBtnClick: () -> Unit = {}
+    isEnabled: Boolean = true,
+    onBtnClick: () -> Unit = {},
 ) {
     Button(
         modifier = modifier,
@@ -58,6 +59,7 @@ fun PrimaryButton(
             contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         onClick = { if (!isLoading) onBtnClick() },
+        enabled = isEnabled
     ) {
         if (isLoading)
             CircularProgressIndicator(

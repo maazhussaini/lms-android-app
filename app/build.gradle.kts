@@ -9,6 +9,9 @@ plugins {
     
     // Apply KSP plugin using version from catalog
     alias(libs.plugins.ksp) apply true
+    
+    // Kotlin Serialization
+    alias(libs.plugins.kotlin.serialization) apply true
 }
 
 android {
@@ -93,8 +96,14 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.common.ktx)
+    
+    // Kotlin Serialization
+    implementation(libs.kotlinx.serialization.json)
     
     // Hilt
     implementation(libs.hilt.android)

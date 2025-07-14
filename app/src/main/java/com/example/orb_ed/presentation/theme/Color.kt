@@ -35,6 +35,7 @@ val Disabled = Color(0x61000000) // 38% opacity black
 val DisabledVariant = Color(0x1F000000) // 12% opacity black
 
 val PrimaryColor = Color(0xFF43277E)
+val DarkPrimaryColor = Color(0xFF200E46)
 val GreySubtitleColor = Color(0xFF343434)
 val GreyLabelColor = Color(0xFF2F3C42)
 val GreyHintColor = Color(0xFF63747D)
