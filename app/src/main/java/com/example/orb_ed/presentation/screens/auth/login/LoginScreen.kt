@@ -25,6 +25,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -115,7 +117,7 @@ fun LoginScreen(
                 Text(
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = 32.dp),
-                    text = "Sign In To Your Account",
+                    text = stringResource(id = R.string.sign_in_to_your_account),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -132,8 +134,8 @@ fun LoginScreen(
                 CustomTextField(
                     value = uiState.email,
                     onValueChange = { onIntent(LoginIntent.EmailChanged(it)) },
-                    label = "Email",
-                    hint = "Enter Your Email",
+                    label = stringResource(id = R.string.email),
+                    hint = stringResource(id = R.string.enter_your_email),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Next
@@ -146,8 +148,8 @@ fun LoginScreen(
                 CustomTextField(
                     value = uiState.password,
                     onValueChange = { onIntent(LoginIntent.PasswordChanged(it)) },
-                    label = "Password",
-                    hint = "Enter Your Password",
+                    label = stringResource(id = R.string.password),
+                    hint = stringResource(id = R.string.enter_your_password),
                     trailingIcon = {
                         Icon(
                             modifier = Modifier
@@ -157,8 +159,8 @@ fun LoginScreen(
                                 },
                             imageVector = if (uiState.isPasswordVisible) Icons.Outlined.VisibilityOff
                             else Icons.Outlined.Visibility,
-                            contentDescription = if (uiState.isPasswordVisible) "Hide password"
-                            else "Show password"
+                            contentDescription = if (uiState.isPasswordVisible) stringResource(id = R.string.hide_password)
+                            else stringResource(id = R.string.show_password)
                         )
                     },
                     visualTransformation = if (uiState.isPasswordVisible) VisualTransformation.None
@@ -171,7 +173,7 @@ fun LoginScreen(
 
                 // Forgot password link
                 Text(
-                    text = "Forgot Password?",
+                    text = stringResource(id = R.string.forgot_password),
                     color = PrimaryColor,
                     modifier = Modifier
                         .align(Alignment.End)
@@ -185,7 +187,7 @@ fun LoginScreen(
                 // Login button
                 PrimaryButton(
                     modifier = Modifier.fillMaxWidth(),
-                    btnText = "Login",
+                    btnText = stringResource(id = R.string.login),
                     isLoading = isLoading
                 ) {
                     onIntent(LoginIntent.Login)
@@ -207,7 +209,7 @@ fun LoginScreen(
                     ) {
                         Image(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_finger_print),
-                            contentDescription = "finger_print_icon"
+                            contentDescription = stringResource(id = R.string.fingerprint_icon)
                         )
                     }
 
@@ -224,7 +226,7 @@ fun LoginScreen(
                     ) {
                         Image(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_face_id),
-                            contentDescription = "face_id_icon"
+                            contentDescription = stringResource(id = R.string.face_id_icon)
                         )
                     }
 
@@ -233,10 +235,10 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
                 AnnotatedLinkText(
-                    fullText = "Don't have an account? Sign Up",
+                    fullText = stringResource(R.string.dont_have_an_account),
                     clickableParts = listOf(
                         ClickableTextPart(
-                            text = "Sign Up",
+                            text = stringResource(R.string.sign_up),
                             tag = "signup",
                             onClick = {
                                 onIntent(LoginIntent.NavigateToSignup)

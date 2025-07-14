@@ -105,13 +105,13 @@ fun ResetPasswordScreen(
                 Text(
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = 48.dp),
-                    text = "Reset Your Password?",
+                    text = stringResource(id = R.string.reset_your_password),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(Modifier.height(3.dp))
                 Text(
-                    text = "Create a new password to continue.",
+                    text = stringResource(id = R.string.create_new_password),
                     style = MaterialTheme.typography.bodyLarge,
                     color = GreySubtitleColor
                 )
@@ -123,8 +123,8 @@ fun ResetPasswordScreen(
                 CustomTextField(
                     value = uiState.password,
                     onValueChange = { onIntent(ResetPasswordIntent.PasswordChanged(it)) },
-                    label = "Password",
-                    hint = "Enter Your Password",
+                    label = stringResource(id = R.string.password),
+                    hint = stringResource(id = R.string.enter_your_password),
                     trailingIcon = {
                         Icon(
                             modifier = Modifier
@@ -132,8 +132,8 @@ fun ResetPasswordScreen(
                                 .clickable { onIntent(ResetPasswordIntent.TogglePasswordVisibility) },
                             imageVector = if (uiState.isPasswordVisible) Icons.Outlined.VisibilityOff
                             else Icons.Outlined.Visibility,
-                            contentDescription = if (uiState.isPasswordVisible) "Hide password"
-                            else "Show password"
+                            contentDescription = if (uiState.isPasswordVisible) stringResource(id = R.string.hide_password)
+                            else stringResource(id = R.string.show_password)
                         )
                     },
                     visualTransformation = if (uiState.isPasswordVisible) VisualTransformation.None
@@ -150,8 +150,8 @@ fun ResetPasswordScreen(
                 CustomTextField(
                     value = uiState.confirmPassword,
                     onValueChange = { onIntent(ResetPasswordIntent.ConfirmPasswordChanged(it)) },
-                    label = "Confirm Password",
-                    hint = "Confirm Your Password",
+                    label = stringResource(id = R.string.confirm_password),
+                    hint = stringResource(id = R.string.confirm_your_password),
                     trailingIcon = {
                         Icon(
                             modifier = Modifier
@@ -159,8 +159,8 @@ fun ResetPasswordScreen(
                                 .clickable { onIntent(ResetPasswordIntent.ToggleConfirmPasswordVisibility) },
                             imageVector = if (uiState.isConfirmPasswordVisible) Icons.Outlined.VisibilityOff
                             else Icons.Outlined.Visibility,
-                            contentDescription = if (uiState.isConfirmPasswordVisible) "Hide password"
-                            else "Show password"
+                            contentDescription = if (uiState.isConfirmPasswordVisible) stringResource(id = R.string.hide_password)
+                            else stringResource(id = R.string.show_password)
                         )
                     },
                     visualTransformation = if (uiState.isConfirmPasswordVisible) VisualTransformation.None
@@ -176,7 +176,7 @@ fun ResetPasswordScreen(
                 // Reset Password button
                 PrimaryButton(
                     modifier = Modifier.fillMaxWidth(),
-                    btnText = "Reset Password",
+                    btnText = stringResource(id = R.string.reset_password),
                     isLoading = isLoading,
                 ) {
                     onIntent(ResetPasswordIntent.ResetPassword)
@@ -185,10 +185,10 @@ fun ResetPasswordScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 AnnotatedLinkText(
-                    fullText = "Remember? Back To Login",
+                    fullText = stringResource(id = R.string.remember_back_to_login),
                     clickableParts = listOf(
                         ClickableTextPart(
-                            text = "Back To Login",
+                            text = stringResource(id = R.string.back_to_login),
                             tag = "login",
                             onClick = {
                                 onIntent(ResetPasswordIntent.NavigateToLogin)

@@ -1,5 +1,79 @@
 <resources>
+    <!-- App Name -->
     <string name="app_name">Orb-Ed</string>
+    
+    <!-- Auth -->
     <string name="sign_up_to_your_account">Sign Up To Your Account</string>
-    <string name="your_learning_anywhere_anytime">\"Your Learning. Anywhere, Anytime.\""</string>
+    <string name="sign_in_to_your_account">Sign In To Your Account</string>
+    <string name="your_learning_anywhere_anytime">Your Learning. Anywhere, Anytime.</string>
+    <string name="dont_have_an_account">Don\'t have an account? Sign Up</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="remember_me">Remember me</string>
+    <string name="or_continue_with">Or Continue With</string>
+    
+    <!-- Form Fields -->
+    <string name="email">Email</string>
+    <string name="enter_your_email">Enter Your Email</string>
+    <string name="password">Password</string>
+    <string name="enter_your_password">Enter Your Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="confirm_your_password">Confirm Your Password</string>
+    <string name="enter_your_email_to_receive_otp">Enter Your Email To Receive OTP</string>
+    
+    <!-- Buttons -->
+    <string name="login">Login</string>
+    <string name="send">Send</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="back_to_login">Back To Login</string>
+    <string name="remember_back_to_login">Remember? Back To Login</string>
+    
+    <!-- Password Visibility -->
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+    
+    <!-- Home Screen -->
+    <string name="welcome_to_orbed">Welcome to OrbEd</string>
+    <string name="home_description">Your personal learning companion for all your educational needs. Explore, learn, and grow with our interactive lessons and resources.</string>
+    <string name="more_features_coming_soon">More features coming soon!</string>
+    <string name="copyright_notice"> 2025 OrbEd. All rights reserved.</string>
+    <string name="home_screen">Home Screen</string>
+    
+    <!-- Forgot Password -->
+    <string name="forgot_your_password">Forgot Your Password?</string>
+    <string name="forgot_password_description">Don\'t worry, it happens. Let\'s reset it</string>
+    
+    <!-- Reset Password -->
+    <string name="reset_your_password">Reset Your Password</string>
+    <string name="create_new_password">Create a new password to continue.</string>
+    
+    <!-- Success Messages -->
+    <string name="password_reset_successfully">Password reset successfully</string>
+    
+    <!-- Error Messages -->
+    <string name="error_unknown">An unknown error occurred</string>
+    <string name="error_logout_failed">Logout failed</string>
+    <string name="dismiss">Dismiss</string>
+    
+    <!-- Form Fields -->
+    <string name="phone_number">Phone Number</string>
+    <string name="phone_number_hint">(305) 123-4567</string>
+    <string name="institute">Institute</string>
+    <string name="select_your_institute">Select Your Institute</string>
+    <string name="institute_1">Institute 1</string>
+    <string name="institute_2">Institute 2</string>
+    <string name="institute_3">Institute 3</string>
+    <string name="others">Others</string>
+    <string name="other_institute">Other Institute</string>
+    <string name="enter_your_institute">Enter Your Institute</string>
+    <string name="already_have_an_account">Already Have An Account? Log In</string>
+    <string name="log_in">Log In</string>
+    
+    <!-- Icons -->
+    <string name="app_logo">App Logo</string>
+    <string name="logout_icon">Logout</string>
+    <string name="fingerprint_icon">Fingerprint</string>
+    <string name="face_id_icon">Face ID</string>
+    <string name="go_to">Go to %1$s</string>
 </resources>

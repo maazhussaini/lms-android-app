@@ -14,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.orb_ed.R
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.orb_ed.presentation.theme.OrbEdTheme
 
@@ -27,12 +29,12 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("OrbEd") },
+                title = { Text(stringResource(id = R.string.app_name)) },
                 actions = {
                     IconButton(onClick = onLogout) {
                         Icon(
                             imageVector = Icons.Default.ExitToApp,
-                            contentDescription = "Logout"
+                            contentDescription = stringResource(id = R.string.logout_icon)
                         )
                     }
                 }
@@ -51,7 +53,7 @@ fun HomeScreen(
         ) {
             // App header
             Text(
-                text = "Welcome to OrbEd",
+                text = stringResource(id = R.string.welcome_to_orbed),
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
@@ -62,7 +64,7 @@ fun HomeScreen(
             
             // App description
             Text(
-                text = "Your personal learning companion for all your educational needs. Explore, learn, and grow with our interactive lessons and resources.",
+                text = stringResource(id = R.string.home_description),
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(vertical = 16.dp)
@@ -70,7 +72,7 @@ fun HomeScreen(
             
             // Coming soon message
             Text(
-                text = "More features coming soon!",
+                text = stringResource(id = R.string.more_features_coming_soon),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(vertical = 16.dp)
@@ -80,7 +82,7 @@ fun HomeScreen(
         
             // Footer
             Text(
-                text = " 2025 OrbEd. All rights reserved.",
+                text = stringResource(id = R.string.copyright_notice),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 16.dp)

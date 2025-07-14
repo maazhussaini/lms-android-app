@@ -99,13 +99,13 @@ fun ForgotPasswordScreen(
                         Text(
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(horizontal = 32.dp),
-                            text = "Forgot Your Password?",
+                            text = stringResource(id = R.string.forgot_your_password),
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.primary
                         )
                         Spacer(Modifier.height(3.dp))
                         Text(
-                            text = "Don't worry, it happens. Let's reset it",
+                            text = stringResource(id = R.string.forgot_password_description),
                             style = MaterialTheme.typography.bodyLarge,
                             color = GreySubtitleColor
                         )
@@ -116,8 +116,8 @@ fun ForgotPasswordScreen(
                     CustomTextField(
                         value = uiState.email,
                         onValueChange = { onIntent(ForgotPasswordIntent.EmailChanged(it)) },
-                        label = "Email",
-                        hint = "Enter Your Email To Receive OTP",
+                        label = stringResource(id = R.string.email),
+                        hint = stringResource(id = R.string.enter_your_email_to_receive_otp),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Done
@@ -132,7 +132,7 @@ fun ForgotPasswordScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 16.dp),
-                            btnText = "Send",
+                            btnText = stringResource(id = R.string.send),
                             isLoading = isLoading
                         ) {
                             onIntent(ForgotPasswordIntent.SendOtp)
@@ -140,10 +140,10 @@ fun ForgotPasswordScreen(
 
                         // Back to login link
                         AnnotatedLinkText(
-                            fullText = "Remember? Back to Login",
+                            fullText = stringResource(id = R.string.remember_back_to_login),
                             clickableParts = listOf(
                                 ClickableTextPart(
-                                    text = "Back to Login",
+                                    text = stringResource(id = R.string.back_to_login),
                                     tag = "login",
                                     onClick = { onIntent(ForgotPasswordIntent.NavigateToLogin) },
                                 )

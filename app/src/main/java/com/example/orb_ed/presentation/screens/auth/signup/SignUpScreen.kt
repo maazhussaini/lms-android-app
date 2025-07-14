@@ -150,8 +150,8 @@ fun SignupScreen(
                         CustomTextField(
                             value = uiState.email,
                             onValueChange = { onIntent(SignUpIntent.EmailChanged(it)) },
-                            label = "Email",
-                            hint = "Enter Your Email",
+                            label = stringResource(id = R.string.email),
+                            hint = stringResource(id = R.string.enter_your_email),
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Email,
                                 imeAction = ImeAction.Next
@@ -161,8 +161,8 @@ fun SignupScreen(
                         CustomTextField(
                             value = uiState.phoneNumber,
                             onValueChange = { onIntent(SignUpIntent.PhoneNumberChanged(it)) },
-                            label = "Phone Number",
-                            hint = "(305) 123-4567",
+                            label = stringResource(id = R.string.phone_number),
+                            hint = stringResource(id = R.string.phone_number_hint),
                             showCountryPicker = true,
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Phone,
@@ -173,8 +173,8 @@ fun SignupScreen(
                         CustomTextField(
                             value = uiState.password,
                             onValueChange = { onIntent(SignUpIntent.PasswordChanged(it)) },
-                            label = "Password",
-                            hint = "Enter Your Password",
+                            label = stringResource(id = R.string.password),
+                            hint = stringResource(id = R.string.enter_your_password),
                             trailingIcon = {
                                 Icon(
                                     modifier = Modifier
@@ -187,7 +187,7 @@ fun SignupScreen(
                                             )
                                         },
                                     imageVector = if (uiState.isPasswordVisible) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
-                                    contentDescription = if (uiState.isPasswordVisible) "Hide password" else "Show password"
+                                    contentDescription = if (uiState.isPasswordVisible) stringResource(id = R.string.hide_password) else stringResource(id = R.string.show_password)
                                 )
                             },
                             visualTransformation = if (uiState.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -206,8 +206,8 @@ fun SignupScreen(
                                     )
                                 )
                             },
-                            label = "Confirm Password",
-                            hint = "Confirm Your Password",
+                            label = stringResource(id = R.string.confirm_password),
+                            hint = stringResource(id = R.string.confirm_your_password),
                             trailingIcon = {
                                 Icon(
                                     modifier = Modifier
@@ -221,7 +221,7 @@ fun SignupScreen(
                                         },
                                     imageVector =
                                         if (uiState.isConfirmPasswordVisible) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
-                                    contentDescription = if (uiState.isConfirmPasswordVisible) "Hide password" else "Show password"
+                                    contentDescription = if (uiState.isConfirmPasswordVisible) stringResource(id = R.string.hide_password) else stringResource(id = R.string.show_password)
                                 )
                             },
                             visualTransformation = if (uiState.isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -232,7 +232,11 @@ fun SignupScreen(
                         )
 
                         val instituteOptions =
-                            listOf("Institute 1", "Institute 2", "Institute 3")
+                            listOf(
+                                stringResource(id = R.string.institute_1),
+                                stringResource(id = R.string.institute_2),
+                                stringResource(id = R.string.institute_3)
+                            )
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -253,8 +257,8 @@ fun SignupScreen(
                                     value = uiState.selectedInstitute,
                                     onValueChange = {},
                                     readOnly = true,
-                                    label = "Institute",
-                                    hint = "Select Your Institute",
+                                    label = stringResource(id = R.string.institute),
+                                    hint = stringResource(id = R.string.select_your_institute),
                                     trailingIcon = {
                                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = uiState.isInstituteDropdownExpanded)
                                     },
@@ -296,7 +300,7 @@ fun SignupScreen(
                             }
 
                             Text(
-                                "Others",
+                                text = stringResource(id = R.string.others),
                                 style = MaterialTheme.typography.labelMedium.copy(
                                     letterSpacing = 0.5.sp,
                                     color = PrimaryColor
@@ -308,8 +312,8 @@ fun SignupScreen(
                             CustomTextField(
                                 value = uiState.instituteName,
                                 onValueChange = { onIntent(SignUpIntent.InstituteNameChanged(it)) },
-                                label = "Other Institute",
-                                hint = "Enter Your Institute"
+                                label = stringResource(id = R.string.other_institute),
+                                hint = stringResource(id = R.string.enter_your_institute)
                             )
                         }
                     }
@@ -318,7 +322,7 @@ fun SignupScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     PrimaryButton(
                         modifier = Modifier.fillMaxWidth(),
-                        btnText = "Sign Up",
+                        btnText = stringResource(id = R.string.sign_up),
                         isLoading = isLoading
                     ) {
                         onIntent(SignUpIntent.SignUp)
@@ -327,10 +331,10 @@ fun SignupScreen(
                     AnnotatedLinkText(
                         modifier = Modifier
                             .padding(vertical = 16.dp),
-                        fullText = "Already Have An Account? Log In",
+                        fullText = stringResource(id = R.string.already_have_an_account),
                         clickableParts = listOf(
                             ClickableTextPart(
-                                text = "Log In",
+                                text = stringResource(id = R.string.log_in),
                                 tag = "login",
                                 onClick = { onIntent(SignUpIntent.NavigateToLogin) },
                             )

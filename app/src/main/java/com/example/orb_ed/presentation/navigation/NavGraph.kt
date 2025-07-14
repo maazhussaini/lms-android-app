@@ -4,12 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.orb_ed.R
 import com.example.orb_ed.presentation.screens.auth.forgotpassword.ForgotPasswordScreen
 import com.example.orb_ed.presentation.screens.auth.forgotpassword.ForgotPasswordViewModel
 import com.example.orb_ed.presentation.screens.auth.login.LoginScreen
@@ -122,7 +124,7 @@ fun AppNavGraph(
         composable<Home> { backStackEntry ->
             // Add your Home screen composable here when ready
             // For now, it's a placeholder
-            androidx.compose.material3.Text("Home Screen")
+            androidx.compose.material3.Text(stringResource(id = R.string.home_screen))
         }
     }
 }
