@@ -4,14 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.orb_ed.R
+import com.example.orb_ed.presentation.screens.auth.courseplayer.CoursePlayerScreen
 import com.example.orb_ed.presentation.screens.auth.forgotpassword.ForgotPasswordScreen
 import com.example.orb_ed.presentation.screens.auth.forgotpassword.ForgotPasswordViewModel
 import com.example.orb_ed.presentation.screens.auth.login.LoginScreen
@@ -20,6 +19,7 @@ import com.example.orb_ed.presentation.screens.auth.otp.OtpScreen
 import com.example.orb_ed.presentation.screens.auth.otp.OtpViewModel
 import com.example.orb_ed.presentation.screens.auth.signup.SignUpViewModel
 import com.example.orb_ed.presentation.screens.auth.signup.SignupScreen
+import com.example.orb_ed.presentation.screens.home.HomeScreen
 import com.example.orb_ed.presentation.screens.splash.SplashScreen
 
 /**
@@ -46,14 +46,14 @@ fun AppNavGraph(
             val viewModel: LoginViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsState()
             val effect = viewModel.effect
-            
+
             LoginScreen(
                 uiState = uiState,
                 effect = effect,
                 onIntent = viewModel::sendIntent,
                 onNavigateToSignUp = { navController.navigate(SignUp) },
                 onNavigateToForgotPassword = { navController.navigate(ForgotPassword) },
-                onLoginSuccess = { 
+                onLoginSuccess = {
                     navController.navigate(Home) {
                         // Clear the back stack to prevent going back to login
                         popUpTo(0) { inclusive = true }
@@ -62,12 +62,16 @@ fun AppNavGraph(
             )
         }
 
+        composable<CoursePlayer> { backStackEntry ->
+            CoursePlayerScreen()
+        }
+
         // Sign Up Screen
         composable<SignUp> { backStackEntry ->
             val viewModel: SignUpViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsState()
             val effect = viewModel.effect
-            
+
             SignupScreen(
                 uiState = uiState,
                 effect = effect,
@@ -110,7 +114,7 @@ fun AppNavGraph(
             LaunchedEffect(Unit) {
                 viewModel.setEmail(email)
             }
-            
+
             OtpScreen(
                 uiState = uiState,
                 effect = viewModel.effect,
@@ -119,12 +123,13 @@ fun AppNavGraph(
                 onNavigateToNext = { /* Handle successful verification */ }
             )
         }
-        
+
         // Home Screen
         composable<Home> { backStackEntry ->
             // Add your Home screen composable here when ready
             // For now, it's a placeholder
-            androidx.compose.material3.Text(stringResource(id = R.string.home_screen))
+//            androidx.compose.material3.Text(stringResource(id = R.string.home_screen))
+            HomeScreen()
         }
     }
 }

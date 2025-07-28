@@ -3,18 +3,34 @@ package com.example.orb_ed.presentation.screens.auth.otp
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
@@ -26,7 +42,11 @@ import com.example.orb_ed.R
 import com.example.orb_ed.presentation.components.AnnotatedLinkText
 import com.example.orb_ed.presentation.components.ClickableTextPart
 import com.example.orb_ed.presentation.components.PrimaryButton
-import com.example.orb_ed.presentation.theme.*
+import com.example.orb_ed.presentation.theme.GreyBorderColor
+import com.example.orb_ed.presentation.theme.GreyHintColor
+import com.example.orb_ed.presentation.theme.GreySubtitleColor
+import com.example.orb_ed.presentation.theme.LightPurpleBackgroundColor
+import com.example.orb_ed.presentation.theme.OrbEdTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -144,7 +164,9 @@ fun OtpScreen(
 
                 // Continue Button
                 PrimaryButton(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 24.dp),
                     btnText = "Continue",
                     isLoading = uiState.isLoading,
                     isEnabled = uiState.otp.length == 6
@@ -216,7 +238,7 @@ private fun CodeEntry(text: String) {
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = text,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.primary
         )
     }

@@ -101,6 +101,14 @@ dependencies {
     // Navigation
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.navigation.common.ktx)
+
+    implementation("com.exyte:animated-navigation-bar:1.0.0")
+    /*implementation("net.bunnystream.bunny-stream-api:1.0.0")
+    implementation("net.bunnystream.bunny-stream-player:1.0.0")
+    implementation("net.bunnystream.bunny-stream-camera-upload:1.0.0")
+    implementation("net.bunnystream:api:1.0.0")
+    implementation("net.bunnystream:player:1.0.0")
+    implementation("net.bunnystream:recording:1.0.0")*/
     
     // Kotlin Serialization
     implementation(libs.kotlinx.serialization.json)

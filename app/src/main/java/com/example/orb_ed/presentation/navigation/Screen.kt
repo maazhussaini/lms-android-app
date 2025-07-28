@@ -26,6 +26,9 @@ object Home
 @Serializable
 object ResetPassword
 
+@Serializable
+object CoursePlayer
+
 // Screens with arguments
 @Serializable
 data class OTP(val email: String)
