@@ -88,6 +88,9 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // Security
+    implementation(libs.androidx.security.crypto.ktx)
     
     // Compose
     implementation(platform(libs.androidx.compose.bom))
@@ -125,20 +128,13 @@ dependencies {
         exclude("org.jetbrains.kotlin:kotlin-annotation-processing")
     }
     implementation(libs.hilt.navigation.compose)
-    
-    // Retrofit
+
+    // Retrofit & Gson
     implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.moshi)
+    implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
-    
-    // Moshi
-    implementation(libs.moshi)
-    implementation(libs.moshi.kotlin)
-    ksp(libs.moshi.kotlin.codegen) {
-        // Exclude the KAPT annotation processor
-        exclude("org.jetbrains.kotlin:kotlin-annotation-processing")
-    }
+    implementation(libs.gson)
     
     // Room
     implementation(libs.room.runtime)
@@ -147,7 +143,6 @@ dependencies {
     
     // Room KSP extension
     ksp("androidx.room:room-compiler:${libs.versions.room.get()}") {
-        // Exclude the KAPT annotation processor
         exclude("org.jetbrains.kotlin:kotlin-annotation-processing")
     }
     
@@ -160,6 +155,17 @@ dependencies {
     
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
+
+    // Security Crypto
+    implementation(libs.androidx.security.crypto)
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.core)
+
+    // Lifecycle
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     
     // Testing
     testImplementation(libs.junit)
@@ -184,7 +190,47 @@ androidComponents {
 
 // Enable Hilt's compiler
 hilt {
-    enableAggregatingTask = false
+    enableAggregatingTask = true
 }
 
-// KSP is already applied in the plugins block
+// KSP Configuration
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.incremental", "true")
+    arg("room.expandProjection", "true")
+}
+
+// Enable Java 8+ API desugaring
+android {
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+        isCoreLibraryDesugaringEnabled = true
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_21.toString()
+        freeCompilerArgs += listOf(
+            "-Xjvm-default=all",
+            "-opt-in=kotlin.RequiresOptIn"
+        )
+    }
+
+    // Ensure consistent JVM target for all compilation tasks
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_21.toString()
+        }
+    }
+
+    // Configure Java compilation to match Kotlin's JVM target
+    tasks.withType<JavaCompile>().configureEach {
+        sourceCompatibility = JavaVersion.VERSION_21.toString()
+        targetCompatibility = JavaVersion.VERSION_21.toString()
+    }
+}
+
+// Add core library desugaring
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+}
