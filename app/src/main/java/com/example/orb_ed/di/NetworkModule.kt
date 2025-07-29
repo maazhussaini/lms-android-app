@@ -4,16 +4,16 @@ import com.example.orb_ed.BuildConfig
 import com.example.orb_ed.data.remote.api.ApiService
 import com.example.orb_ed.data.remote.interceptor.AuthInterceptor
 import com.example.orb_ed.util.Constants
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -27,14 +27,24 @@ object NetworkModule {
     private const val CACHE_SIZE_BYTES = 10 * 1024 * 1024L // 10 MB
 
     /**
-     * Provides a Gson instance for JSON serialization/deserialization.
+     * Provides a JSON instance for Kotlin Serialization.
+     *
+     * Configuration:
+     * - ignoreUnknownKeys: Skip unknown JSON fields instead of throwing SerializationException
+     * - isLenient: Allow non-strict JSON format
+     * - prettyPrint: Format JSON with indentation for better readability
+     * - explicitNulls: Include null values in serialization
+     * - coerceInputValues: Coerce invalid values to default values when possible
      */
     @Provides
     @Singleton
-    fun provideGson(): Gson = GsonBuilder()
-        .setLenient()
-        .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-        .create()
+    fun provideJson(): Json = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+        prettyPrint = true
+        explicitNulls = false
+        coerceInputValues = true
+    }
 
     /**
      * Provides an HTTP logging interceptor for debugging purposes.
@@ -53,6 +63,12 @@ object NetworkModule {
 
     /**
      * Provides an OkHttpClient with interceptors and timeouts configured.
+     *
+     * Configuration includes:
+     * - Logging interceptor for debugging
+     * - Auth interceptor for token injection
+     * - Timeout settings
+     * - Connection settings
      */
     @Provides
     @Singleton
@@ -61,7 +77,7 @@ object NetworkModule {
         authInterceptor: AuthInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            // Add logging interceptor
+            // Add logging interceptor (should be last)
             .addInterceptor(loggingInterceptor)
             // Add auth interceptor for token injection
             .addInterceptor(authInterceptor)
@@ -69,11 +85,10 @@ object NetworkModule {
             .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            // Enable request/response caching
-            .cache(null) // You can configure a cache here if needed
-            // Enable retry on connection failure
+            // Connection settings
             .retryOnConnectionFailure(true)
-            // Build the client
+            .followRedirects(true)
+            .followSslRedirects(true)
             .build()
     }
 
@@ -83,13 +98,14 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit(
-        gson: Gson,
+        json: Json,
         okHttpClient: OkHttpClient
     ): Retrofit {
+        val contentType = "application/json".toMediaType()
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(json.asConverterFactory(contentType))
             .build()
     }
 

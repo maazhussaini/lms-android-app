@@ -1,6 +1,7 @@
 package com.example.orb_ed.util
 
 import com.example.orb_ed.domain.usecase.auth.AuthResult
+import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -31,6 +32,8 @@ object ApiResponseHandler {
             Result.failure(Exception(errorMessage))
         } catch (e: IOException) {
             Result.failure(Exception("Network error. Please check your internet connection."))
+        } catch (e: SerializationException) {
+            Result.failure(Exception("Error parsing server response. Please try again."))
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -42,16 +45,46 @@ object ApiResponseHandler {
      * @param onSuccess A lambda that transforms the success data to the desired type.
      * @return An [AuthResult] representing the result of the operation.
      */
-    fun <T, R> Result<T>.toAuthResult(
+    /**
+     * Maps a [Result] to an [AuthResult], handling success and error cases.
+     *
+     * @param onSuccess A lambda that transforms the success data to the desired type.
+     * @return An [AuthResult] representing the result of the operation.
+     */
+    /*fun <T, R> Result<T>.toAuthResult(
         onSuccess: (T) -> R
     ): AuthResult<R> {
         return when (val result = this) {
-            is Result.Success -> AuthResult.Success(onSuccess(result.getOrNull()!!))
-            is Result.Failure -> AuthResult.Error(
-                result.exceptionOrNull()?.message ?: "An unknown error occurred"
-            )
-
-            else -> AuthResult.Error("Unknown result type")
+            is Result.Success -> {
+                try {
+                    val data = result.data
+                    if (data != null) {
+                        AuthResult.Success(onSuccess(data))
+                    } else {
+                        AuthResult.Error("Response data is null")
+                    }
+                } catch (e: Exception) {
+                    AuthResult.Error("Failed to process response: ${e.message ?: "Unknown error"}")
+                }
+            }
+            is Result.Failure -> {
+                val errorMessage = result.message.ifEmpty { "An unknown error occurred" }
+                AuthResult.Error(errorMessage)
+            }
+            is Result.Exception -> {
+                val errorMessage = result.e.message ?: "An unexpected error occurred"
+                when (result.e) {
+                    is kotlinx.serialization.SerializationException -> 
+                        AuthResult.Error("Data serialization error: $errorMessage")
+                    is java.net.ConnectException -> 
+                        AuthResult.Error("Unable to connect to the server. Please check your internet connection.")
+                    is java.net.SocketTimeoutException -> 
+                        AuthResult.Error("Connection timed out. Please try again.")
+                    is java.net.UnknownHostException -> 
+                        AuthResult.Error("Unable to resolve host. Please check your internet connection.")
+                    else -> AuthResult.Error("An error occurred: $errorMessage")
+                }
+            }
         }
-    }
+    }*/
 }

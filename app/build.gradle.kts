@@ -1,17 +1,13 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 // Apply plugins with versions from libs.versions.toml
 plugins {
     alias(libs.plugins.android.application) apply true
     alias(libs.plugins.kotlin.android) apply true
     alias(libs.plugins.kotlin.compose) apply true
-    
-    // Apply Hilt plugin using version catalog
-    alias(libs.plugins.hilt.android) apply true
-    
-    // Apply KSP plugin using version from catalog
-    alias(libs.plugins.ksp) apply true
-    
-    // Kotlin Serialization
     alias(libs.plugins.kotlin.serialization) apply true
+    alias(libs.plugins.hilt.android) apply true
+    alias(libs.plugins.ksp) apply true
 }
 
 android {
@@ -20,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.orb_ed"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -84,6 +80,28 @@ android {
 }
 
 dependencies {
+    // Force specific versions for dependencies with conflicts
+    configurations.all {
+        resolutionStrategy {
+            // Force specific versions for known conflicts
+            force("com.squareup:javapoet:1.13.0")
+
+            // Ensure all Dagger dependencies use the same version
+            eachDependency {
+                if (requested.group == "com.google.dagger") {
+                    // Use the version from libs.versions.toml for all Dagger dependencies
+                    useVersion(libs.versions.hiltAndroid.get())
+                }
+            }
+        }
+    }
+
+    // Explicitly add JavaPoet
+    implementation("com.squareup:javapoet:1.13.0")
+
+    // Error Prone annotations (required by Tink)
+    implementation("com.google.errorprone:error_prone_annotations:2.23.0")
+
     // Core Android
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -106,16 +124,14 @@ dependencies {
     implementation(libs.androidx.navigation.common.ktx)
 
     implementation("com.exyte:animated-navigation-bar:1.0.0")
-    /*implementation("net.bunnystream.bunny-stream-api:1.0.0")
-    implementation("net.bunnystream.bunny-stream-player:1.0.0")
-    implementation("net.bunnystream.bunny-stream-camera-upload:1.0.0")
-    implementation("net.bunnystream:api:1.0.0")
+
+    /*implementation("net.bunnystream:api:1.0.0")
     implementation("net.bunnystream:player:1.0.0")
     implementation("net.bunnystream:recording:1.0.0")*/
     
     // Kotlin Serialization
     implementation(libs.kotlinx.serialization.json)
-    
+
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler) {
@@ -129,17 +145,19 @@ dependencies {
     }
     implementation(libs.hilt.navigation.compose)
 
-    // Retrofit & Gson
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
+    // Retrofit with Kotlin Serialization
+    implementation(libs.retrofit) {
+        exclude(module = "converter-gson")  // Exclude Gson converter
+    }
+    implementation(libs.retrofit.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
-    implementation(libs.gson)
     
     // Room
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
+//    implementation(libs.room.runtime)
+//    implementation(libs.room.ktx)
+//    ksp(libs.room.compiler)
     
     // Room KSP extension
     ksp("androidx.room:room-compiler:${libs.versions.room.get()}") {
@@ -190,7 +208,7 @@ androidComponents {
 
 // Enable Hilt's compiler
 hilt {
-    enableAggregatingTask = true
+    enableAggregatingTask = false
 }
 
 // KSP Configuration
@@ -218,8 +236,8 @@ android {
 
     // Ensure consistent JVM target for all compilation tasks
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_21.toString()
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_21)
         }
     }
 

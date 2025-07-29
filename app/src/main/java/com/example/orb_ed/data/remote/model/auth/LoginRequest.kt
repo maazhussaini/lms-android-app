@@ -1,7 +1,7 @@
 package com.example.orb_ed.data.remote.model.auth
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Data class representing a login request.
@@ -10,14 +10,14 @@ import com.squareup.moshi.JsonClass
  * @property password The user's password.
  * @property tenantContext The tenant context (hardcoded to "1").
  */
-@JsonClass(generateAdapter = true)
+@Serializable
 data class LoginRequest(
-    @Json(name = "email_address")
+    @SerialName("email_address")
     val emailAddress: String,
 
-    @Json(name = "password")
+    @SerialName("password")
     val password: String,
 
-    @Json(name = "tenant_context")
+    @SerialName("tenant_context")
     val tenantContext: String = "1" // Hardcoded as per requirement
 )

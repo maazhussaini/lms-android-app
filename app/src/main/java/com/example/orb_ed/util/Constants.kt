@@ -11,6 +11,7 @@ object Constants {
     // Authentication
     const val TOKEN_TYPE_BEARER = "Bearer"
     const val TENANT_CONTEXT = "1" // Hardcoded tenant context
+    const val TOKEN_EXPIRY_BUFFER_MS = 24 * 60 * 60 * 1000L // 24 hours in milliseconds
 
     // Shared Preferences
     const val PREFERENCES_NAME = "orb_ed_prefs"

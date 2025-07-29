@@ -1,7 +1,7 @@
 package com.example.orb_ed.data.remote.model.auth
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Data class representing a login response.
@@ -10,17 +10,24 @@ import com.squareup.moshi.JsonClass
  * @property message A message describing the result of the login attempt.
  * @property data The login response data containing user information and tokens.
  */
-@JsonClass(generateAdapter = true)
+@Serializable
 data class LoginResponse(
-    @Json(name = "success")
+    @SerialName("success")
     val success: Boolean,
 
-    @Json(name = "message")
+    @SerialName("message")
     val message: String,
 
-    @Json(name = "data")
-    val data: LoginData? = null
+    @SerialName("data")
+    val data: LoginData? = null,
+
+    @SerialName("timestamp")
+    val timestamp: String,
+
+    @SerialName("correlationId")
+    val correlationId: String
 )
+
 
 /**
  * Data class representing the login response data.
@@ -28,13 +35,16 @@ data class LoginResponse(
  * @property user The user information.
  * @property tokens The authentication tokens.
  */
-@JsonClass(generateAdapter = true)
+@Serializable
 data class LoginData(
-    @Json(name = "user")
+    @SerialName("user")
     val user: User? = null,
 
-    @Json(name = "tokens")
-    val tokens: Tokens? = null
+    @SerialName("tokens")
+    val tokens: Tokens? = null,
+
+    @SerialName("permissions")
+    val permissions: List<String>? = null
 )
 
 /**
@@ -45,19 +55,34 @@ data class LoginData(
  * @property name The user's full name.
  * @property role The user's role.
  */
-@JsonClass(generateAdapter = true)
-data class User(
-    @Json(name = "id")
-    val id: String,
+@Serializable
+data class Role(
+    @SerialName("role_name")
+    val roleName: String
+)
 
-    @Json(name = "email")
+@Serializable
+data class User(
+    @SerialName("id")
+    val id: Long,
+
+    @SerialName("username")
+    val username: String,
+
+    @SerialName("full_name")
+    val fullName: String,
+
+    @SerialName("email")
     val email: String,
 
-    @Json(name = "name")
-    val name: String,
+    @SerialName("role")
+    val role: Role,
 
-    @Json(name = "role")
-    val role: String
+    @SerialName("tenant_id")
+    val tenantId: Long,
+
+    @SerialName("user_type")
+    val userType: String
 )
 
 /**
@@ -68,17 +93,17 @@ data class User(
  * @property expiresIn The number of seconds until the access token expires.
  * @property tokenType The type of token.
  */
-@JsonClass(generateAdapter = true)
+@Serializable
 data class Tokens(
-    @Json(name = "access_token")
+    @SerialName("access_token")
     val accessToken: String,
 
-    @Json(name = "refresh_token")
+    @SerialName("refresh_token")
     val refreshToken: String,
 
-    @Json(name = "expires_in")
-    val expiresIn: Int? = null,
+    @SerialName("expires_in")
+    val expiresIn: Long,
 
-    @Json(name = "token_type")
-    val tokenType: String
+    @SerialName("token_type")
+    val tokenType: String = "Bearer"
 )

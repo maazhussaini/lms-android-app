@@ -17,8 +17,11 @@ pluginManagement {
         }
     }
 }
+
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    // Use PREFER_SETTINGS to prioritize settings repositories over project repositories
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    
     repositories {
         google()
         mavenCentral()
@@ -28,12 +31,15 @@ dependencyResolutionManagement {
             credentials {
                 // Use environment variables for GitHub Packages authentication
                 // Ensure GITHUB_ACTOR and GITHUB_TOKEN are set in your environment
-                username = providers.environmentVariable("GITHUB_ACTOR").orNull
-                    ?: System.getenv("GITHUB_ACTOR")
-                            ?: ""
-                password = providers.environmentVariable("GITHUB_TOKEN").orNull
-                    ?: System.getenv("GITHUB_TOKEN")
-                            ?: ""
+                username = providers.gradleProperty("gpr.user").orNull
+                    ?: providers.environmentVariable("GITHUB_ACTOR").orNull
+                            ?: System.getenv("GITHUB_ACTOR")
+                            ?: "AhmadMeghani"
+
+                password = providers.gradleProperty("gpr.key").orNull
+                    ?: providers.environmentVariable("GITHUB_TOKEN").orNull
+                            ?: System.getenv("GITHUB_TOKEN")
+                            ?: "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"
             }
         }*/
     }

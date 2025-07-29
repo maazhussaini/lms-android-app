@@ -2,9 +2,10 @@ package com.example.orb_ed.data.remote.interceptor
 
 import com.example.orb_ed.data.manager.TokenManager
 import com.example.orb_ed.util.Constants
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
-import java.io.IOException
+import okio.IOException
 import javax.inject.Inject
 
 /**
@@ -27,9 +28,10 @@ class AuthInterceptor @Inject constructor(
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
+        val path = request.url.encodedPath
 
         // Skip auth endpoints and other public endpoints
-        if (isPublicEndpoint(request.url.encodedPath)) {
+        if (isPublicEndpoint(path)) {
             return chain.proceed(request)
         }
 
@@ -37,13 +39,15 @@ class AuthInterceptor @Inject constructor(
         val accessToken = tokenManager.accessToken
 
         // If no token is available, proceed without it (will likely result in a 401)
-        if (accessToken == null) {
+        if (accessToken.isNullOrEmpty()) {
             return chain.proceed(request)
         }
 
         // Add the authorization header
         val authenticatedRequest = request.newBuilder()
             .header(Constants.HEADER_AUTHORIZATION, "${Constants.TOKEN_TYPE_BEARER} $accessToken")
+            .header("Accept", "application/json")
+            .header("Content-Type", "application/json")
             .build()
 
         // Execute the request
@@ -52,8 +56,29 @@ class AuthInterceptor @Inject constructor(
         // If we get a 401, the token might be expired
         if (response.code == 401) {
             response.close()
-            // TODO: Implement token refresh logic here
-            throw IOException("Unauthorized - Token may have expired")
+
+            // Try to refresh the token
+            val newToken = runBlocking {
+                try {
+                    tokenManager.refreshToken()
+                } catch (e: Exception) {
+                    null
+                }
+            }
+
+            // If refresh failed, throw an exception
+            if (newToken == null) {
+                throw HttpException("Authentication failed - Please log in again")
+            }
+
+            // Retry the original request with the new token
+            val newRequest = request.newBuilder()
+                .header(Constants.HEADER_AUTHORIZATION, "${Constants.TOKEN_TYPE_BEARER} $newToken")
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .build()
+
+            return chain.proceed(newRequest)
         }
 
         return response
@@ -66,9 +91,14 @@ class AuthInterceptor @Inject constructor(
      * @return `true` if the endpoint is public, `false` otherwise.
      */
     private fun isPublicEndpoint(path: String): Boolean {
-        return Constants.PUBLIC_ENDPOINTS.any { path.contains(it, ignoreCase = true) }
-        return path.endsWith(LOGIN_ENDPOINT) ||
-                path.endsWith(SIGNUP_ENDPOINT) ||
-                path.endsWith(FORGOT_PASSWORD_ENDPOINT)
+        return Constants.PUBLIC_ENDPOINTS.any { endpoint ->
+            path.equals(endpoint, ignoreCase = true) ||
+                    path.endsWith("/$endpoint", ignoreCase = true)
+        }
     }
+
+    /**
+     * Custom exception for HTTP errors.
+     */
+    class HttpException(override val message: String) : IOException(message)
 }

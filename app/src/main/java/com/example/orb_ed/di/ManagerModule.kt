@@ -6,13 +6,12 @@ import androidx.security.crypto.MasterKey
 import com.example.orb_ed.data.manager.TokenManager
 import com.example.orb_ed.data.manager.UserManager
 import com.example.orb_ed.util.Constants
-import com.example.orb_ed.util.NetworkUtils
-import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 /**
@@ -68,15 +67,6 @@ object ManagerModule {
     @Singleton
     fun provideUserManager(
         @ApplicationContext context: Context,
-        gson: Gson
-    ): UserManager = UserManager(context, gson)
-
-    /**
-     * Provides the NetworkUtils for network-related operations.
-     */
-    @Provides
-    @Singleton
-    fun provideNetworkUtils(@ApplicationContext context: Context): NetworkUtils {
-        return NetworkUtils(context)
-    }
+        json: Json
+    ): UserManager = UserManager(context, json)
 }
