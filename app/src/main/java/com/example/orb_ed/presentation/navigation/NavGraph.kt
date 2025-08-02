@@ -63,7 +63,7 @@ fun AppNavGraph(
         }
 
         composable<CoursePlayer> { backStackEntry ->
-            CoursePlayerScreen()
+            CoursePlayerScreen("687638e9-deb7-4882-9380-dea9065efc70", 459051)
         }
 
         // Sign Up Screen
@@ -129,7 +129,9 @@ fun AppNavGraph(
             // Add your Home screen composable here when ready
             // For now, it's a placeholder
 //            androidx.compose.material3.Text(stringResource(id = R.string.home_screen))
-            HomeScreen()
+            HomeScreen(onVideoClick = {
+                navController.navigate(CoursePlayer)
+            })
         }
     }
 }

@@ -65,6 +65,7 @@ import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
 fun HomeScreen(
 //    navController: NavController = rememberNavController(),
 //    viewModel: HomeViewModel = hiltViewModel()
+    onVideoClick: () -> Unit
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedTabIndex by remember { mutableStateOf(0) }
@@ -473,7 +474,7 @@ fun HomeScreen(
 
             if (selectedTabIndex == 0 || selectedTabIndex == 1)
                 CourseCardGrid(if (selectedTabIndex == 0) courses else enrolledCourses) {
-
+                    onVideoClick()
                 }
             else {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
@@ -628,6 +629,6 @@ data class Program(
 @Composable
 fun HomeScreenPreview() {
     OrbEdTheme {
-        HomeScreen()
+        HomeScreen({})
     }
 }

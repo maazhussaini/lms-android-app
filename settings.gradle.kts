@@ -25,7 +25,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        /*maven { url = uri("https://jitpack.io") }
+        maven { url = uri("https://jitpack.io") }
         maven {
             url = uri("https://maven.pkg.github.com/BunnyWay/bunny-stream-android")
             credentials {
@@ -35,13 +35,15 @@ dependencyResolutionManagement {
                     ?: providers.environmentVariable("GITHUB_ACTOR").orNull
                             ?: System.getenv("GITHUB_ACTOR")
                             ?: "AhmadMeghani"
+                print("Bunny username: $username")
 
                 password = providers.gradleProperty("gpr.key").orNull
                     ?: providers.environmentVariable("GITHUB_TOKEN").orNull
                             ?: System.getenv("GITHUB_TOKEN")
                             ?: "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"
+                print("Bunny password: $password")
             }
-        }*/
+        }
     }
 }
 

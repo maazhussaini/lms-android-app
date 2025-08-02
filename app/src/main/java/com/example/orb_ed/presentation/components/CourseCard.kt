@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.orb_ed.presentation.theme.FreeTagBackgroundColor
@@ -143,14 +144,19 @@ fun CourseCardGrid(course: List<CourseCard>, onCardClick: (CourseCard) -> Unit) 
                         ) {
                             Text(
                                 text = professor.time,
-                                style = MaterialTheme.typography.bodySmall.copy(color = GreyHintColor)
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    color = GreyHintColor,
+                                    fontSize = 6.sp
+                                )
                             )
 
                             Text(
                                 textAlign = TextAlign.Center,
                                 text = professor.price,
+                                overflow = Ellipsis,
+                                maxLines = 1,
                                 modifier = Modifier
-                                    .width(40.dp)
+                                    .width(44.dp)
                                     .background(
                                         color = if (professor.price.contains("Free")) FreeTagBackgroundColor else if (professor.price.contains(
                                                 "Purchased"
@@ -162,7 +168,7 @@ fun CourseCardGrid(course: List<CourseCard>, onCardClick: (CourseCard) -> Unit) 
                                     )
                                     .padding(vertical = 4.dp),
                                 style = MaterialTheme.typography.labelLarge.copy(
-                                    fontSize = 6.sp,
+                                    fontSize = 8.sp,
                                     color = if (professor.price.contains("Free")) FreeTagColor else if (professor.price.contains(
                                             "Purchased"
                                         )

@@ -45,6 +45,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--<activity
+            android:name="net.bunnystream.bunnystreamplayer.ui.fullscreen.FullScreenPlayerActivity"
+            android:theme="@style/OpaqueBackgroundTheme" />-->
     </application>
 
 </manifest>

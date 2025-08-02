@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply true
     alias(libs.plugins.hilt.android) apply true
     alias(libs.plugins.ksp) apply true
+
+    kotlin("plugin.parcelize")
 }
 
 android {
@@ -125,10 +127,10 @@ dependencies {
 
     implementation("com.exyte:animated-navigation-bar:1.0.0")
 
-    /*implementation("net.bunnystream:api:1.0.0")
-    implementation("net.bunnystream:player:1.0.0")
-    implementation("net.bunnystream:recording:1.0.0")*/
-    
+    implementation(libs.bunny.player)
+    implementation(libs.bunny.api)
+//    implementation(libs.bunny.recording)
+
     // Kotlin Serialization
     implementation(libs.kotlinx.serialization.json)
 

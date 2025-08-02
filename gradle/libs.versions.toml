@@ -1,5 +1,6 @@
 [versions]
 agp = "8.11.1"
+api = "1.0.0"
 kotlin = "2.2.0"
 ksp = "2.2.0-2.0.2"
 coreKtx = "1.16.0"
@@ -27,6 +28,7 @@ hiltNavigationCompose = "1.2.0"
 hiltCompiler = "1.2.0"  # Should match hiltAndroid version
 
 # Retrofit & Kotlin Serialization
+player = "1.0.0"
 retrofit = "3.0.0"
 okhttp = "5.1.0"
 retrofitKotlinxSerialization = "1.0.0"
@@ -88,6 +90,9 @@ hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref =
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 # Retrofit & Kotlin Serialization
+bunny-player = { module = "net.bunnystream:player", version.ref = "player" }
+bunny-recording = { module = "net.bunnystream:recording", version.ref = "api" }
+bunny-api = { module = "net.bunnystream:api", version.ref = "api" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-kotlinx-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerialization" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }

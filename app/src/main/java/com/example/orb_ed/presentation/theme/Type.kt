@@ -13,47 +13,47 @@ val Typography = Typography(
     titleLarge = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_bold)),
         fontWeight = FontWeight.W700,
-        fontSize = 24.sp
+        fontSize = 26.sp
     ),
     titleMedium = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_medium)),
         fontWeight = FontWeight.W500,
-        fontSize = 20.sp
+        fontSize = 22.sp
     ),
     titleSmall = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_medium)),
         fontWeight = FontWeight.W500,
-        fontSize = 16.sp
+        fontSize = 18.sp
     ),
     bodyLarge = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_regular)),
         fontWeight = FontWeight.W400,
-        fontSize = 13.sp
+        fontSize = 15.sp
     ),
     bodyMedium = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_regular)),
         fontWeight = FontWeight.W400,
-        fontSize = 8.sp
+        fontSize = 10.sp
     ),
     bodySmall = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_regular)),
         fontWeight = FontWeight.W400,
-        fontSize = 6.sp
+        fontSize = 8.sp
     ),
     labelLarge = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_medium)),
         fontWeight = FontWeight.W500,
-        fontSize = 11.sp
+        fontSize = 13.sp
     ),
     labelMedium = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_regular)),
         fontWeight = FontWeight.W400,
-        fontSize = 10.sp
+        fontSize = 12.sp
     ),
     labelSmall = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_regular)),
         fontWeight = FontWeight.W400,
-        fontSize = 7.sp
+        fontSize = 9.sp
     ),
     displayLarge = TextStyle(
         fontFamily = FontFamily.Default,
