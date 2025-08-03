@@ -26,9 +26,23 @@ object Home
 @Serializable
 object ResetPassword
 
-@Serializable
-object CoursePlayer
-
 // Screens with arguments
 @Serializable
 data class OTP(val email: String)
+
+//Starting points from bottom nav bar
+// Screens with arguments
+@Serializable
+data class CoursePlayer(val videoId: String, val libraryId: Long)
+
+@Serializable
+object CoursesDashboard
+
+@Serializable
+object Reminders
+
+@Serializable
+object Noticeboard
+
+@Serializable
+object Settings

@@ -10,7 +10,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.orb_ed.presentation.screens.auth.courseplayer.CoursePlayerScreen
 import com.example.orb_ed.presentation.screens.auth.forgotpassword.ForgotPasswordScreen
 import com.example.orb_ed.presentation.screens.auth.forgotpassword.ForgotPasswordViewModel
 import com.example.orb_ed.presentation.screens.auth.login.LoginScreen
@@ -19,7 +18,6 @@ import com.example.orb_ed.presentation.screens.auth.otp.OtpScreen
 import com.example.orb_ed.presentation.screens.auth.otp.OtpViewModel
 import com.example.orb_ed.presentation.screens.auth.signup.SignUpViewModel
 import com.example.orb_ed.presentation.screens.auth.signup.SignupScreen
-import com.example.orb_ed.presentation.screens.home.HomeScreen
 import com.example.orb_ed.presentation.screens.splash.SplashScreen
 
 /**
@@ -62,9 +60,9 @@ fun AppNavGraph(
             )
         }
 
-        composable<CoursePlayer> { backStackEntry ->
+        /*composable<CoursesDashboard> { backStackEntry ->
             CoursePlayerScreen("687638e9-deb7-4882-9380-dea9065efc70", 459051)
-        }
+        }*/
 
         // Sign Up Screen
         composable<SignUp> { backStackEntry ->
@@ -128,10 +126,11 @@ fun AppNavGraph(
         composable<Home> { backStackEntry ->
             // Add your Home screen composable here when ready
             // For now, it's a placeholder
-//            androidx.compose.material3.Text(stringResource(id = R.string.home_screen))
-            HomeScreen(onVideoClick = {
-                navController.navigate(CoursePlayer)
-            })
+////            androidx.compose.material3.Text(stringResource(id = R.string.home_screen))
+//            HomeScreen(onVideoClick = {
+//                navController.navigate(CoursesDashboard)
+//            })
+            BottomNavScaffold()
         }
     }
 }

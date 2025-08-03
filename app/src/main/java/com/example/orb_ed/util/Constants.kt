@@ -8,6 +8,9 @@ object Constants {
     const val BASE_URL = "https://skonzify.com/api/v1/"
     const val API_TIMEOUT = 30L // seconds
 
+    const val VIDEO_ID = "687638e9-deb7-4882-9380-dea9065efc70"
+    const val LIBRARY_ID = 459051L
+
     // Authentication
     const val TOKEN_TYPE_BEARER = "Bearer"
     const val TENANT_CONTEXT = "1" // Hardcoded tenant context
@@ -48,17 +51,18 @@ object Constants {
         Endpoints.FORGOT_PASSWORD,
         "auth/" // All auth endpoints
     )
+
     // Database
     const val DATABASE_NAME = "orb_ed_database"
-    
+
     // Timeouts
     const val CONNECT_TIMEOUT = 30L // seconds
     const val READ_TIMEOUT = 30L // seconds
     const val WRITE_TIMEOUT = 30L // seconds
-    
+
     // Pagination
     const val DEFAULT_PAGE_SIZE = 20
-    
+
     // Other constants
     const val EMPTY_STRING = ""
 }

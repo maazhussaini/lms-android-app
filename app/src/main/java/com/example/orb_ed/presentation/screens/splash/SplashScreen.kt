@@ -35,7 +35,7 @@ fun SplashScreen(
 
     // Navigate based on login status after delay
     LaunchedEffect(key1 = true) {
-        delay(2000) // 2 seconds delay
+        delay(500) // 2 seconds delay
         if (isLoggedIn) {
             onNavigateToHome()
         } else {
