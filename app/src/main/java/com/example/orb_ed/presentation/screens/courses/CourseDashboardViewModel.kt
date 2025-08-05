@@ -62,24 +62,20 @@ class CourseDashboardViewModel @Inject constructor(
                 // Load programs
                 getProgramsUseCase().collectLatest { programs ->
                     _state.update { it.copy(programs = programs) }
-                    if (programs.isNotEmpty()) {
-                        // Load specializations for the first program by default
-//                        loadSpecializations(programs[0].id)
-                    }
                 }
 
                 // Load enrolled courses
                 getEnrolledCoursesUseCase().collectLatest { courses ->
                     _state.update { state ->
                         state.copy(
-                            discoverCourses = courses,
-                            filteredCourses = applyFilters(
+                            enrolledCourses = courses,
+                            /*filteredCourses = applyFilters(
                                 courses = courses,
                                 searchQuery = state.searchQuery,
                                 tabIndex = state.selectedTabIndex,
                                 programIndex = state.selectedProgramIndex,
                                 specializationIndex = state.selectedSpecializationIndex
-                            )
+                            )*/
                         )
                     }
                 }
@@ -234,7 +230,13 @@ class CourseDashboardViewModel @Inject constructor(
     private fun loadDiscoverCourses() {
         viewModelScope.launch {
             try {
-                _state.update { it.copy(isDiscoverLoading = true, discoverError = null) }
+                _state.update {
+                    it.copy(
+                        isDiscoverLoading = true,
+                        discoverError = null,
+                        discoverCourses = emptyList()
+                    )
+                }
 
                 // Get the selected program ID if any
                 val programId =

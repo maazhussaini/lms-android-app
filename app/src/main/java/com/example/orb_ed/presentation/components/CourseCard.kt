@@ -167,10 +167,8 @@ fun CourseCardGrid(courseList: List<Course>, onCardClick: (Course) -> Unit) {
                             )
                         }
                     } else {
-                        ProgressWithLabel(course.progress / 100f)
+                        ProgressWithLabel(course.progress)
                     }
-
-
                 }
             }
         }

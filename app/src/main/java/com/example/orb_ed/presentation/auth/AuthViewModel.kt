@@ -1,6 +1,7 @@
 package com.example.orb_ed.presentation.auth
 
 import com.example.orb_ed.data.manager.TokenManager
+import com.example.orb_ed.util.AuthEventBus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +22,7 @@ class AuthViewModel @Inject constructor(
 
     fun clearAuthState() {
         _authState.value = AuthState.Authenticated
+        AuthEventBus.reset()
         tokenManager.clearTokens()
     }
 }

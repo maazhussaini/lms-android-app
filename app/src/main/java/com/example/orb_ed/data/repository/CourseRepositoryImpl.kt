@@ -24,7 +24,39 @@ class CourseRepositoryImpl @Inject constructor(
 //    private val sampleCourses = courseLists
 
     override suspend fun getEnrolledCourses(): Flow<List<Course>> = flow {
-        emit(emptyList()) // Implement later if needed
+        try {
+            val token = tokenManager.accessToken
+            if (token.isNullOrEmpty()) {
+                Log.d(TAG, "No access token available")
+                emit(emptyList())
+                return@flow
+            }
+
+            val response = api.getEnrolledCourses(
+                authToken = "Bearer $token"
+            )
+
+            if (response.isSuccessful) {
+                val courses = response.body()?.data?.items?.map { it.toCourse() } ?: emptyList()
+                Log.d(TAG, "Successfully fetched ${courses.size} enrolled courses")
+                emit(courses)
+            } else {
+                Log.e(
+                    TAG,
+                    "Failed to fetch enrolled courses: ${response.code()} - ${response.message()}"
+                )
+                emit(emptyList())
+            }
+        } catch (e: IOException) {
+            Log.e(TAG, "Network error while fetching enrolled courses", e)
+            emit(emptyList())
+        } catch (e: HttpException) {
+            Log.e(TAG, "HTTP error while fetching enrolled courses", e)
+            emit(emptyList())
+        } catch (e: Exception) {
+            Log.e(TAG, "Unexpected error while fetching enrolled courses", e)
+            emit(emptyList())
+        }
     }
 
     override suspend fun getPrograms(): Flow<List<Program>> = flow {

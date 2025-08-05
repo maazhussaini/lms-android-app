@@ -82,7 +82,7 @@ fun CourseDashboardScreen(
                 modifier = Modifier.fillMaxWidth(),
                 tabs = listOf(
                     "All Courses (${state.discoverCourses.size})",
-                    "Enrolled (6)",
+                    "Enrolled (${state.enrolledCourses.size})",
                     "Unenrolled (0)"
                 )
             )
@@ -158,7 +158,7 @@ fun CourseDashboardScreen(
 
 
         if (state.selectedTabIndex == 0 || state.selectedTabIndex == 1)
-            CourseCardGrid(state.discoverCourses) {
+            CourseCardGrid(if (state.selectedTabIndex == 0) state.discoverCourses else state.enrolledCourses) {
                 onCourseClick(VIDEO_ID)
             }
         else {

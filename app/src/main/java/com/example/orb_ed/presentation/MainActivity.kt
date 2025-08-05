@@ -50,14 +50,13 @@ fun OrbEdApp(
         AuthEventBus.authEvents.collect { event ->
             when (event) {
                 is AuthEvent.AuthenticationFailed -> {
-                    coroutineScope.launch {
+                    coroutineScope.launch {// Navigate to login screen and clear back stack
+                        navController.navigateToLogin()
+                        viewModel.clearAuthState()
                         snackbarHostState.showSnackbar(
                             message = event.message,
                             duration = SnackbarDuration.Short
                         )
-                        // Navigate to login screen and clear back stack
-                        navController.navigateToLogin()
-                        viewModel.clearAuthState()
                     }
                 }
             }

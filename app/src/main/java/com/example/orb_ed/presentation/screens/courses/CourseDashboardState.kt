@@ -14,6 +14,7 @@ data class CourseDashboardState(
     val specializations: List<Specialization> = emptyList(),
     val selectedSpecializationIndex: Int = -1,
     val discoverCourses: List<Course> = emptyList(),
+    val enrolledCourses: List<Course> = emptyList(),
 
 
     val isLoading: Boolean = false,

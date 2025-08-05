@@ -1,6 +1,7 @@
 package com.example.orb_ed.data.remote.api
 
 import com.example.orb_ed.data.remote.dto.DiscoveredCoursesResponse
+import com.example.orb_ed.data.remote.dto.EnrolledCoursesResponse
 import com.example.orb_ed.data.remote.dto.ProgramsResponse
 import com.example.orb_ed.data.remote.dto.SpecializationsResponse
 import retrofit2.Response
@@ -40,6 +41,14 @@ interface CourseApiService {
         @Query("program_id") programId: Int,
         @Header("Authorization") authToken: String
     ): Response<SpecializationsResponse>
+
+    @GET("student/profile/enrollments")
+    suspend fun getEnrolledCourses(
+        @Query("search_query") searchQuery: String? = null,
+        @Query("enrollment_status") enrollmentStatus: String = "ACTIVE",
+        @Query("include_progress") includeProgress: Boolean = true,
+        @Header("Authorization") authToken: String
+    ): Response<EnrolledCoursesResponse>
 }
 
 /*data class CoursesData(
