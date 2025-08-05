@@ -1,6 +1,8 @@
 package com.example.orb_ed.data.remote.interceptor
 
 import com.example.orb_ed.data.manager.TokenManager
+import com.example.orb_ed.util.AuthEvent
+import com.example.orb_ed.util.AuthEventBus
 import com.example.orb_ed.util.Constants
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -66,8 +68,13 @@ class AuthInterceptor @Inject constructor(
                 }
             }
 
-            // If refresh failed, throw an exception
+            // If refresh failed, post authentication failed event
             if (newToken == null) {
+                runBlocking {
+                    AuthEventBus.postEvent(
+                        AuthEvent.AuthenticationFailed("Authentication failed - Please log in again")
+                    )
+                }
                 throw HttpException("Authentication failed - Please log in again")
             }
 

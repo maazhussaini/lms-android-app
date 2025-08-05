@@ -76,4 +76,9 @@
     <string name="fingerprint_icon">Fingerprint</string>
     <string name="face_id_icon">Face ID</string>
     <string name="go_to">Go to %1$s</string>
+    <string name="search_courses">Search Here...</string>
+    <string name="courses_title">My Courses</string>
+    <string name="no_courses_found">No Unenrolled Courses</string>
+    <string name="programs">Programs</string>
+    <string name="specializations">Specializations</string>
 </resources>

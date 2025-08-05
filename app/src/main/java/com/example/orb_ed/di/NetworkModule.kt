@@ -2,6 +2,7 @@ package com.example.orb_ed.di
 
 import com.example.orb_ed.BuildConfig
 import com.example.orb_ed.data.remote.api.ApiService
+import com.example.orb_ed.data.remote.api.CourseApiService
 import com.example.orb_ed.data.remote.interceptor.AuthInterceptor
 import com.example.orb_ed.util.Constants
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -116,5 +117,14 @@ object NetworkModule {
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+
+    /**
+     * Provides the Course API service interface for making course-related network requests.
+     */
+    @Provides
+    @Singleton
+    fun provideCourseApiService(retrofit: Retrofit): CourseApiService {
+        return retrofit.create(CourseApiService::class.java)
     }
 }

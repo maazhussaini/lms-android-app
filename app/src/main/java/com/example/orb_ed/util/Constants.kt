@@ -5,7 +5,7 @@ package com.example.orb_ed.util
  */
 object Constants {
     // API Configuration
-    const val BASE_URL = "https://skonzify.com/api/v1/"
+    const val BASE_URL = "https://student.skonzify.com/api/v1/"
     const val API_TIMEOUT = 30L // seconds
 
     const val VIDEO_ID = "687638e9-deb7-4882-9380-dea9065efc70"

@@ -1,5 +1,6 @@
 package com.example.orb_ed.presentation.screens.courses
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,288 +20,35 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.orb_ed.R
 import com.example.orb_ed.presentation.components.CategoryTabs
-import com.example.orb_ed.presentation.components.CourseCard
 import com.example.orb_ed.presentation.components.CourseCardGrid
 import com.example.orb_ed.presentation.components.SearchBar
 import com.example.orb_ed.presentation.theme.GreySubtitleColor
 import com.example.orb_ed.presentation.theme.LightPurpleBackgroundColor
 import com.example.orb_ed.presentation.theme.PrimaryColor
-import com.example.orb_ed.util.Constants.LIBRARY_ID
 import com.example.orb_ed.util.Constants.VIDEO_ID
+import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun CourseDashboardScreen(modifier: Modifier = Modifier, onVideoClick: (String, Long) -> Unit) {
-    var searchQuery by remember { mutableStateOf("") }
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    var selectedProgram by remember { mutableIntStateOf(-1) }
-    var selectedSpecialization by remember { mutableIntStateOf(-1) }
-
-    val programLists = listOf(
-        Program(0xFF3DD4CF, R.drawable.science, "Science"),
-        Program(0xFF70A5FE, R.drawable.computer, "Computer"),
-        Program(0xFFFF869D, R.drawable.arts, "Arts"),
-        Program(0xFFF9B823, R.drawable.marketing, "Marketing"),
-        Program(0xFF0097FE, R.drawable.finance, "Finance"),
-        Program(0xFF5E301E, R.drawable.history, "History"),
-        Program(0xFF3DD4CF, R.drawable.science, "Science"),
-        Program(0xFF70A5FE, R.drawable.computer, "Computer"),
-        Program(0xFFFF869D, R.drawable.arts, "Arts"),
-        Program(0xFFF9B823, R.drawable.marketing, "Marketing"),
-        Program(0xFF0097FE, R.drawable.finance, "Finance"),
-        Program(0xFF5E301E, R.drawable.history, "History")
-    )
-
-    val specializationLists = listOf(
-        Program(0xFF3DD4CF, R.drawable.science, "Abc"),
-        Program(0xFF70A5FE, R.drawable.computer, "Rxy"),
-    )
-    // Sample list
-    val initialCourses = listOf(
-        CourseCard(
-            "Chris Evans",
-            "CS Professor",
-            "Computer Science",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Free",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Cherry Blossom",
-            "CS Professor",
-            "Basic Electronic",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Buy $10",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Mick Taylor",
-            "CS Professor",
-            "Financial Accounting",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Purchased",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Sebastian Liam",
-            "CS Professor",
-            "Economics",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Buy $10",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Matthew Phill",
-            "CS Professor",
-            "Artificial Inteliigence",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Purchased",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Bella Hadid",
-            "CS Professor",
-            "Marketing",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Buy $10",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Chris Evans",
-            "CS Professor",
-            "Computer Science",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Free",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Cherry Blossom",
-            "CS Professor",
-            "Basic Electronic",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Buy $10",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Mick Taylor",
-            "CS Professor",
-            "Financial Accounting",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Free",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Sebastian Liam",
-            "CS Professor",
-            "Economics",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Buy $10",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Matthew Phill",
-            "CS Professor",
-            "Artificial Inteliigence",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Free",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Bella Hadid",
-            "CS Professor",
-            "Marketing",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Buy $10",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Chris Evans",
-            "CS Professor",
-            "Computer Science",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Free",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Cherry Blossom",
-            "CS Professor",
-            "Basic Electronic",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Buy $10",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Mick Taylor",
-            "CS Professor",
-            "Financial Accounting",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Free",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Sebastian Liam",
-            "CS Professor",
-            "Economics",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Buy $10",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Matthew Phill",
-            "CS Professor",
-            "Artificial Inteliigence",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Free",
-            R.drawable.user_image
-        ),
-        CourseCard(
-            "Bella Hadid",
-            "CS Professor",
-            "Marketing",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Buy $10",
-            R.drawable.user_image
-        ),
-        // Repeat or generate more
-    )
-    var courses by remember { mutableStateOf(initialCourses) }
-
-
-    val enrolledCourses = listOf(
-        CourseCard(
-            "Chris Evans",
-            "CS Professor",
-            "Computer Science",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Free",
-            R.drawable.user_image,
-            progress = 23f
-        ),
-        CourseCard(
-            "Cherry Blossom",
-            "CS Professor",
-            "Basic Electronic",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Buy $10",
-            R.drawable.user_image,
-            progress = 67f
-        ),
-        CourseCard(
-            "Mick Taylor",
-            "CS Professor",
-            "Financial Accounting",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Free",
-            R.drawable.user_image,
-            progress = 38f
-        ),
-        CourseCard(
-            "Sebastian Liam",
-            "CS Professor",
-            "Economics",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Buy $10",
-            R.drawable.user_image,
-            progress = 50f
-        ),
-        CourseCard(
-            "Matthew Phill",
-            "CS Professor",
-            "Artificial Inteliigence",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Free",
-            R.drawable.user_image,
-            progress = 40f
-        ),
-        CourseCard(
-            "Bella Hadid",
-            "CS Professor",
-            "Marketing",
-            "Software Engineering",
-            "3 Hrs 15 mins",
-            "Buy $10",
-            R.drawable.user_image,
-            progress = 80f
-        ),
-        // Repeat or generate more
-    )
+fun CourseDashboardScreen(
+    modifier: Modifier = Modifier,
+    state: CourseDashboardState,
+    effect: Flow<CourseDashboardEffect>,
+    onIntent: (CourseDashboardIntent) -> Unit,
+    onNavigateBack: () -> Unit = {},
+    onCourseClick: (String) -> Unit = {}
+) {
 
     Column(
         modifier = modifier
+            .fillMaxSize()
             .background(LightPurpleBackgroundColor),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
@@ -312,16 +60,16 @@ fun CourseDashboardScreen(modifier: Modifier = Modifier, onVideoClick: (String, 
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             Text(
-                text = "My Courses",
+                text = stringResource(R.string.courses_title),
                 style = MaterialTheme.typography.titleMedium.copy(color = PrimaryColor)
             )
 
 
             // Search Bar
             SearchBar(
-                query = searchQuery,
-                onQueryChange = { searchQuery = it },
-                onSearch = { /* TODO: Handle search */ },
+                query = state.searchQuery,
+                onQueryChange = { onIntent(CourseDashboardIntent.SearchQueryChanged(it)) },
+                onSearch = { onIntent(CourseDashboardIntent.OnSearchClicked) },
                 onFilterClick = { /* TODO: Handle filter */ },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -329,25 +77,26 @@ fun CourseDashboardScreen(modifier: Modifier = Modifier, onVideoClick: (String, 
 
             // Category Tabs
             CategoryTabs(
-                selectedTabIndex = selectedTabIndex,
-                onTabSelected = { selectedTabIndex = it },
+                selectedTabIndex = state.selectedTabIndex,
+                onTabSelected = { onIntent(CourseDashboardIntent.TabSelected(it)) },
                 modifier = Modifier.fillMaxWidth(),
-                tabs = listOf("All Courses (50)", "Enrolled (6)", "Unenrolled (0)")
+                tabs = listOf(
+                    "All Courses (${state.discoverCourses.size})",
+                    "Enrolled (6)",
+                    "Unenrolled (0)"
+                )
             )
 
-
-
-            if (selectedTabIndex == 0)
+            if (state.selectedTabIndex == 0) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    if (selectedSpecialization > -1 || selectedProgram > -1)
+                    if (state.selectedSpecializationIndex > -1 || state.selectedProgramIndex > -1)
                         Icon(
                             modifier = Modifier.clickable {
-                                if (selectedSpecialization > -1) {
-                                    selectedSpecialization = -1
+                                if (state.selectedSpecializationIndex > -1) {
+                                    onIntent(CourseDashboardIntent.SpecializationSelected(-1))
                                 } else {
-                                    selectedProgram = -1
+                                    onIntent(CourseDashboardIntent.ProgramSelected(-1))
                                 }
-                                courses = courses.shuffled()
                             },
                             imageVector = Icons.Default.ArrowBackIosNew,
                             contentDescription = null
@@ -356,15 +105,15 @@ fun CourseDashboardScreen(modifier: Modifier = Modifier, onVideoClick: (String, 
 
                     Column {
                         Text(
-                            text = if (selectedSpecialization > -1) specializationLists[selectedSpecialization].title else if (selectedProgram > -1) "Specializations" else "Programs",
+                            text = if (state.selectedSpecializationIndex > -1) state.specializations[state.selectedSpecializationIndex].name else if (state.selectedProgramIndex > -1) "Specializations" else "Programs",
                             style = MaterialTheme.typography.titleSmall.copy(
                                 fontSize = 18.sp, color = PrimaryColor
                             )
                         )
 
-                        if (selectedSpecialization > -1 || selectedProgram > -1)
+                        if (state.selectedSpecializationIndex > -1 || state.selectedProgramIndex > -1)
                             Text(
-                                text = programLists[selectedProgram].title,
+                                text = state.programs[state.selectedProgramIndex].name,
                                 style = MaterialTheme.typography.bodySmall.copy(
                                     fontSize = 14.sp, color = GreySubtitleColor
                                 )
@@ -372,41 +121,45 @@ fun CourseDashboardScreen(modifier: Modifier = Modifier, onVideoClick: (String, 
                     }
 
                 }
+            }
         }
 
-        if (selectedTabIndex == 0)
-            if (selectedSpecialization == -1)
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(20.dp),
-                    contentPadding = PaddingValues(horizontal = 20.dp)
-                ) {
-                    val list = if (selectedProgram > -1) specializationLists else programLists
-
-                    itemsIndexed(list) { index, subject ->
-                        SubjectCategory(
+        if (state.selectedTabIndex == 0 && state.selectedSpecializationIndex == -1) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                contentPadding = PaddingValues(horizontal = 20.dp)
+            ) {
+                if (state.selectedProgramIndex > -1) {
+                    itemsIndexed(state.specializations) { index, specialization ->
+                        SubjectCategoryItem(
                             id = index,
-                            color = subject.color,
-                            image = subject.image,
-                            subject = subject.title,
-                            onItemClick = {
-                                if (selectedProgram > -1) {
-                                    selectedSpecialization = index
-                                } else {
-                                    selectedProgram = index
-                                }
-
-                                courses = courses.shuffled()
-                                // ✅ You can now also use the `index`
-                                println("Clicked item index: $index")
-                            }
-                        )
+                            name = specialization.name,
+                            thumbnailUrl = specialization.thumbnailUrl
+                        ) {
+                            onIntent(CourseDashboardIntent.SpecializationSelected(index))
+                            println("Clicked specialization index: $index")
+                        }
+                    }
+                } else {
+                    itemsIndexed(state.programs) { index, program ->
+                        SubjectCategoryItem(
+                            id = index,
+                            name = program.name,
+                            thumbnailUrl = program.thumbnailUrl
+                        ) {
+                            onIntent(CourseDashboardIntent.ProgramSelected(index))
+                            println("Clicked program index: $index")
+                        }
                     }
                 }
+            }
+        }
 
 
-        if (selectedTabIndex == 0 || selectedTabIndex == 1)
-            CourseCardGrid(if (selectedTabIndex == 0) courses else enrolledCourses) {
-                onVideoClick(VIDEO_ID, LIBRARY_ID)
+
+        if (state.selectedTabIndex == 0 || state.selectedTabIndex == 1)
+            CourseCardGrid(state.discoverCourses) {
+                onCourseClick(VIDEO_ID)
             }
         else {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
@@ -423,10 +176,28 @@ fun CourseDashboardScreen(modifier: Modifier = Modifier, onVideoClick: (String, 
                 )
             }
         }
+
     }
 
 }
 
+@Composable
+fun SubjectCategoryItem(
+    id: Int,
+    name: String,
+    thumbnailUrl: String?,
+    onClick: (Int) -> Unit
+) {
+    SubjectCategory(
+        id = id,
+        subject = name,
+        thumbnailUrl = thumbnailUrl,
+        onItemClick = onClick
+    )
+}
+
+
+/*
 data class Program(
     val color: Long, val image: Int, val title: String
-)
+)*/

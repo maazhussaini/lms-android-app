@@ -1,5 +1,6 @@
 package com.example.orb_ed.presentation.navigation
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
@@ -19,6 +20,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,7 +29,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.orb_ed.presentation.screens.auth.courseplayer.CoursePlayerScreen
 import com.example.orb_ed.presentation.screens.courses.CourseDashboardScreen
+import com.example.orb_ed.presentation.screens.courses.CourseDashboardViewModel
 import com.example.orb_ed.presentation.theme.PrimaryColor
+import com.example.orb_ed.util.Constants.LIBRARY_ID
 import com.exyte.animatednavbar.AnimatedNavigationBar
 import com.exyte.animatednavbar.animation.indendshape.StraightIndent
 import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
@@ -71,7 +76,7 @@ fun BottomNavScaffold(
                 indentAnimation = StraightIndent(
                     indentWidth = 56.dp,
                     indentHeight = 15.dp,
-                    animationSpec = tween(1000)
+                    animationSpec = tween(200)
                 )
             ) {
                 bottomTabs.forEach { tab ->
@@ -92,9 +97,18 @@ fun BottomNavScaffold(
         ) {
             // Type-safe main screens
             composable<CoursesDashboard> {
-                CourseDashboardScreen { videoId, libraryId ->
-                    currentNavController.navigate(CoursePlayer(videoId, libraryId))
-                }
+                val viewModel = hiltViewModel<CourseDashboardViewModel>()
+                val state by viewModel.state.collectAsStateWithLifecycle()
+
+                CourseDashboardScreen(
+                    onNavigateBack = { /* Handle back navigation if needed */ },
+                    onCourseClick = { videoId ->
+                        currentNavController.navigate(CoursePlayer(videoId, LIBRARY_ID))
+                    },
+                    state = state,
+                    effect = viewModel.effect,
+                    onIntent = viewModel::processIntent
+                )
             }
 
             composable<CoursePlayer> {
@@ -166,7 +180,7 @@ fun HandleBackPress(
 
         if (currentTabType == BottomTabType.COURSES) {
             if (backPressedOnce) {
-                (context as? android.app.Activity)?.finish()
+                (context as? Activity)?.finish()
             } else {
                 backPressedOnce = true
                 Toast.makeText(context, "Press back again to exit", Toast.LENGTH_SHORT).show()

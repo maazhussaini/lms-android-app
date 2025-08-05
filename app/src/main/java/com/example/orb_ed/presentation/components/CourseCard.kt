@@ -1,7 +1,6 @@
 package com.example.orb_ed.presentation.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,12 +31,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.orb_ed.domain.model.Course
+import com.example.orb_ed.presentation.screens.courses.InitialsCircleAvatar
 import com.example.orb_ed.presentation.theme.FreeTagBackgroundColor
 import com.example.orb_ed.presentation.theme.FreeTagColor
 import com.example.orb_ed.presentation.theme.GreyHintColor
@@ -48,36 +47,23 @@ import com.example.orb_ed.presentation.theme.ProgressIndicatorColor
 import com.example.orb_ed.presentation.theme.PurchasedTagBackgroundColor
 import com.example.orb_ed.presentation.theme.PurchasedTagColor
 
-// Dummy data class
-data class CourseCard(
-    val name: String,
-    val role: String,
-    val subject: String,
-    val specialization: String,
-    val time: String,
-    val price: String,
-    val imageRes: Int,
-    val progress: Float? = null
-)
-
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CourseCardGrid(course: List<CourseCard>, onCardClick: (CourseCard) -> Unit) {
+fun CourseCardGrid(courseList: List<Course>, onCardClick: (Course) -> Unit) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(horizontal = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        items(course) { professor ->
+        items(courseList) { course ->
             Card(
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onCardClick(professor) }
+                    .clickable { onCardClick(course) }
                     .padding(4.dp)
             ) {
                 Column(modifier = Modifier.padding(7.dp)) {
@@ -91,29 +77,33 @@ fun CourseCardGrid(course: List<CourseCard>, onCardClick: (CourseCard) -> Unit) 
                                 .size(20.dp)
                                 .background(color = Color(0xFFF9BAD3), shape = CircleShape)
                         ) {
-                            Image(
+                            InitialsCircleAvatar(name = course.teacherName)
+                            /*Image(
                                 modifier = Modifier
                                     .size(16.dp)
                                     .clip(CircleShape)
                                     .align(Alignment.Center),
-                                painter = painterResource(id = professor.imageRes),
+                                painter = painterResource(id = course.imageResId),
                                 contentDescription = null
-                            )
+                            )*/
                         }
 
                         Column {
                             Text(
-                                text = professor.name,
+                                text = course.teacherName,
                                 maxLines = 1,
                                 minLines = 1,
-                                overflow = TextOverflow.Ellipsis,
+                                overflow = Ellipsis,
                                 style = MaterialTheme.typography.bodyMedium.copy(color = PrimaryColor)
                             )
 
-                            Text(
-                                professor.role,
-                                style = MaterialTheme.typography.bodySmall.copy(color = GreyHintColor)
-                            )
+                            course.teacherQualification?.let {
+                                Text(
+                                    text = it,
+                                    style = MaterialTheme.typography.bodySmall.copy(color = GreyHintColor)
+                                )
+                            }
+
                         }
                     }
 
@@ -123,42 +113,41 @@ fun CourseCardGrid(course: List<CourseCard>, onCardClick: (CourseCard) -> Unit) 
                         minLines = 2,
                         maxLines = 2,
                         softWrap = true,
-                        text = professor.subject.split(" ").joinToString("\n"),
+                        text = course.title/*.split(" ").joinToString("\n")*/,
                         style = MaterialTheme.typography.labelMedium.copy(color = PrimaryColor)
                     )
 
                     Spacer(Modifier.height(2.dp))
 
                     Text(
-                        text = professor.specialization,
+                        text = course.programName,
                         style = MaterialTheme.typography.labelSmall.copy(color = GreyHintColor)
                     )
 
                     Spacer(Modifier.height(5.dp))
 
-                    if (professor.progress == null) {
+                    if (course.progress <= 0) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = professor.time,
+                                text = course.duration,
                                 style = MaterialTheme.typography.bodySmall.copy(
                                     color = GreyHintColor,
-                                    fontSize = 6.sp
                                 )
                             )
 
                             Text(
                                 textAlign = TextAlign.Center,
-                                text = professor.price,
+                                text = course.price,
                                 overflow = Ellipsis,
                                 maxLines = 1,
                                 modifier = Modifier
-                                    .width(44.dp)
+//                                    .width(44.dp)
                                     .background(
-                                        color = if (professor.price.contains("Free")) FreeTagBackgroundColor else if (professor.price.contains(
+                                        color = if (course.price.contains("Free")) FreeTagBackgroundColor else if (course.price.contains(
                                                 "Purchased"
                                             )
                                         )
@@ -166,10 +155,10 @@ fun CourseCardGrid(course: List<CourseCard>, onCardClick: (CourseCard) -> Unit) 
                                         else PriceTagBackgroundColor,
                                         shape = RoundedCornerShape(5.dp)
                                     )
-                                    .padding(vertical = 4.dp),
+                                    .padding(vertical = 4.dp, horizontal = 6.dp),
                                 style = MaterialTheme.typography.labelLarge.copy(
                                     fontSize = 8.sp,
-                                    color = if (professor.price.contains("Free")) FreeTagColor else if (professor.price.contains(
+                                    color = if (course.price.contains("Free")) FreeTagColor else if (course.price.contains(
                                             "Purchased"
                                         )
                                     )
@@ -178,7 +167,7 @@ fun CourseCardGrid(course: List<CourseCard>, onCardClick: (CourseCard) -> Unit) 
                             )
                         }
                     } else {
-                        ProgressWithLabel(professor.progress / 100f)
+                        ProgressWithLabel(course.progress / 100f)
                     }
 
 
