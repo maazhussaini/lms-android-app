@@ -49,6 +49,7 @@ import com.example.orb_ed.presentation.theme.GreyHintColor
 import com.example.orb_ed.presentation.theme.LightPurpleBackgroundColor
 import com.example.orb_ed.presentation.theme.OrbEdTheme
 import com.example.orb_ed.presentation.theme.PrimaryColor
+import net.bunnystream.bunnystreamplayer.model.PlayerIconSet
 import net.bunnystream.bunnystreamplayer.ui.BunnyStreamPlayer
 
 @Preview(showBackground = true)
@@ -56,19 +57,7 @@ import net.bunnystream.bunnystreamplayer.ui.BunnyStreamPlayer
 fun Preview() {
     OrbEdTheme {
         CoursePlayerScreen(
-            uiState = CoursePlayerState(
-                profilePictureUrl = null,
-                teacherName = "Chris Evans",
-                teacherDesignation = "Computer Science Professor",
-                moduleNumber = 1,
-                moduleName = "Computer Science",
-                lectureNumber = 1,
-                lectureName = "Basic Programming",
-                previousLectureName = "Intro to Python",
-                nextLectureName = null,
-                previousLectureDuration = "30 min 12 sec",
-                nextLectureDuration = null
-            )
+            uiState = CoursePlayerState(), onIntent = {}, onBackClick = {}, onMessageClick = {}
         )
     }
 }
@@ -76,11 +65,11 @@ fun Preview() {
 
 @Composable
 fun CoursePlayerScreen(
-    videoId: String = "",
     libraryId: Long? = null,
     uiState: CoursePlayerState,
-    onBackClick: () -> Unit = {},
-    onMessageClick: () -> Unit = {}
+    onIntent: (CoursePlayerIntent) -> Unit,
+    onBackClick: () -> Unit,
+    onMessageClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -153,41 +142,46 @@ fun CoursePlayerScreen(
                                 color = PrimaryColor
                             )
                         )
-                        Text(
-                            text = uiState.teacherDesignation,
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                color = GreyHintColor
+                        uiState.teacherDesignation?.let {
+                            Text(
+                                text = uiState.teacherDesignation,
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    color = GreyHintColor
+                                )
                             )
-                        )
-
+                        }
                     }
                 }
 
                 Column {
-                    Text(
-                        text = "Module ${uiState.moduleNumber} ${uiState.moduleName}",
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontSize = 9.sp,
-                            color = GreyHintColor
+                    if (uiState.moduleNumber != null && uiState.moduleNumber > 0 && !uiState.moduleName.isNullOrBlank())
+                        Text(
+                            text = "Module ${uiState.moduleNumber} ${uiState.moduleName}",
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontSize = 9.sp,
+                                color = GreyHintColor
+                            )
                         )
-                    )
-                    Text(
-                        text = "Lecture ${uiState.lectureNumber} ${uiState.lectureName}",
-                        style = MaterialTheme.typography.labelLarge.copy(
-                            fontSize = 12.sp,
-                            color = PrimaryColor
+                    if (uiState.lectureNumber > 0 && uiState.lectureName.isNotBlank())
+                        Text(
+                            text = "Lecture ${uiState.lectureNumber} ${uiState.lectureName}",
+                            style = MaterialTheme.typography.labelLarge.copy(
+                                fontSize = 12.sp,
+                                color = PrimaryColor
+                            )
                         )
-                    )
                 }
 
             }
 
 
         }
-        BunnyPlayer(videoId = videoId, libraryId = libraryId)
-        EqualWidthButtonsRow(modifier = Modifier.weight(1f), uiState)
-
-//        VideoWebView(modifier = Modifier.fillMaxWidth().aspectRatio(16f / 9f))
+        BunnyPlayer(videoId = uiState.bunnyVideoId, libraryId = libraryId)
+        EqualWidthButtonsRow(
+            modifier = Modifier.weight(1f),
+            uiState,
+            onPreviousClick = { onIntent(CoursePlayerIntent.OnPreviousClicked) },
+            onNextClick = { onIntent(CoursePlayerIntent.OnNextClicked) })
     }
 
 
@@ -196,14 +190,36 @@ fun CoursePlayerScreen(
 @Composable
 fun BunnyPlayer(modifier: Modifier = Modifier, videoId: String, libraryId: Long?) {
     AndroidView(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .aspectRatio(16f / 9f),
         factory = { context ->
             BunnyStreamPlayer(context)
         },
         update = {
-            it.playVideo(videoId, libraryId)
+            it.iconSet = PlayerIconSet(
+                playIcon = R.drawable.ic_play_48dp,
+
+                pauseIcon = R.drawable.ic_pause_48dp,
+
+                rewindIcon = R.drawable.ic_replay_10s_48dp,
+
+                forwardIcon = R.drawable.ic_forward_10s_48dp,
+
+                settingsIcon = R.drawable.ic_settings_24dp,
+
+                volumeOnIcon = R.drawable.ic_volume_on_24dp,
+
+                volumeOffIcon = R.drawable.ic_volume_off_24dp,
+
+                fullscreenOnIcon = R.drawable.ic_full_screen_on,
+
+                fullscreenOffIcon = R.drawable.ic_fullscreen_exit_24dp,
+            )
+            if (videoId.isNotBlank())
+                it.playVideo(videoId, libraryId)
+
+
         }
     )
 }
@@ -232,7 +248,12 @@ fun VideoWebView(modifier: Modifier = Modifier) {
 
 
 @Composable
-fun EqualWidthButtonsRow(modifier: Modifier = Modifier, uiState: CoursePlayerState) {
+fun EqualWidthButtonsRow(
+    modifier: Modifier = Modifier,
+    uiState: CoursePlayerState,
+    onPreviousClick: () -> Unit,
+    onNextClick: () -> Unit
+) {
     var maxButtonWidth by remember { mutableStateOf(0.dp) }
 
     // This captures and updates the max width between both buttons
@@ -255,7 +276,7 @@ fun EqualWidthButtonsRow(modifier: Modifier = Modifier, uiState: CoursePlayerSta
                 textStyle = MaterialTheme.typography.titleSmall.copy(fontSize = 12.sp),
                 isEnabled = uiState.previousLectureName != null && uiState.previousLectureDuration != null,
                 btnText = "Previous",
-                onBtnClick = {},
+                onBtnClick = { onPreviousClick() },
                 trailingIcon = Icons.Default.KeyboardArrowLeft,
                 modifier = Modifier
                     .onGloballyPositioned {
@@ -289,7 +310,7 @@ fun EqualWidthButtonsRow(modifier: Modifier = Modifier, uiState: CoursePlayerSta
                 textStyle = MaterialTheme.typography.titleSmall.copy(fontSize = 12.sp),
                 isEnabled = uiState.nextLectureName != null && uiState.nextLectureDuration != null,
                 btnText = "Next",
-                onBtnClick = {},
+                onBtnClick = { onNextClick() },
                 leadingIcon = Icons.Default.KeyboardArrowRight,
                 modifier = Modifier
                     .onGloballyPositioned {

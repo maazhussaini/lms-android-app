@@ -8,6 +8,7 @@ import com.example.orb_ed.data.remote.dto.DiscoveredCoursesResponse
 import com.example.orb_ed.data.remote.dto.EnrolledCoursesResponse
 import com.example.orb_ed.data.remote.dto.ProgramsResponse
 import com.example.orb_ed.data.remote.dto.SpecializationsResponse
+import com.example.orb_ed.data.remote.dto.VideoDetailsResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -32,6 +33,12 @@ interface CourseApiService {
         @Path("topicId") topicId: Int,
         @Header("Authorization") authToken: String
     ): Response<CourseVideosResponse>
+
+    @GET("videos/{videoId}/details")
+    suspend fun getVideoDetailsById(
+        @Path("videoId") videoId: Int,
+        @Header("Authorization") authToken: String
+    ): Response<VideoDetailsResponse>
     
     /*@GET("courses/enrolled")
     suspend fun getEnrolledCourses(): Response<ApiResponse<CoursesData>>

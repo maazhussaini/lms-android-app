@@ -10,6 +10,7 @@ import com.example.orb_ed.domain.model.CourseTopic
 import com.example.orb_ed.domain.model.CourseVideo
 import com.example.orb_ed.domain.model.Program
 import com.example.orb_ed.domain.model.Specialization
+import com.example.orb_ed.domain.model.VideoDetails
 import com.example.orb_ed.domain.repository.CourseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -109,6 +110,34 @@ class CourseRepositoryImpl @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error getting course videos", e)
+                emit(Result.failure(e))
+            }
+        }
+
+    override suspend fun getVideoDetailsById(videoId: Int): Flow<Result<VideoDetails>> = flow {
+        try {
+            val token = tokenManager.accessToken
+            if (token == null) {
+                emit(Result.failure(Exception("User not authenticated")))
+                return@flow
+            }
+
+            val response = api.getVideoDetailsById(videoId, "Bearer $token")
+
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body?.success == true) {
+                    val videoDetails = body.data.toVideoDetails()
+                    emit(Result.success(videoDetails))
+                } else {
+                    emit(Result.failure(Exception(body?.message ?: "Unknown error")))
+                }
+            } else {
+                val errorBody = response.errorBody()?.string()
+                emit(Result.failure(Exception("Failed to fetch video details: $errorBody")))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting video details", e)
             emit(Result.failure(e))
         }
     }

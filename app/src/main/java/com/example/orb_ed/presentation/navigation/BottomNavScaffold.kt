@@ -30,7 +30,7 @@ import androidx.navigation.toRoute
 import com.example.orb_ed.presentation.screens.auth.coursedetail.CourseDetailScreen
 import com.example.orb_ed.presentation.screens.auth.coursedetail.CourseDetailViewModel
 import com.example.orb_ed.presentation.screens.auth.courseplayer.CoursePlayerScreen
-import com.example.orb_ed.presentation.screens.auth.courseplayer.CoursePlayerState
+import com.example.orb_ed.presentation.screens.auth.courseplayer.CoursePlayerViewModel
 import com.example.orb_ed.presentation.screens.courses.CourseDashboardScreen
 import com.example.orb_ed.presentation.screens.courses.CourseDashboardViewModel
 import com.example.orb_ed.presentation.theme.PrimaryColor
@@ -132,22 +132,15 @@ fun BottomNavScaffold(
 
             composable<CoursePlayer> {
                 val coursePlayerData = it.toRoute<CoursePlayer>()
+                val viewModel = hiltViewModel<CoursePlayerViewModel>()
+                val state by viewModel.state.collectAsStateWithLifecycle()
+
                 CoursePlayerScreen(
-                    uiState = CoursePlayerState(
-                        profilePictureUrl = null,
-                        teacherName = "Chris Evans",
-                        teacherDesignation = "Computer Science Professor",
-                        moduleNumber = 1,
-                        moduleName = "Computer Science",
-                        lectureNumber = 1,
-                        lectureName = "Basic Programming",
-                        previousLectureName = null,
-                        nextLectureName = null,
-                        previousLectureDuration = null,
-                        nextLectureDuration = null
-                    ),
-                    videoId = coursePlayerData.videoId,
-                    libraryId = coursePlayerData.libraryId
+                    uiState = state,
+                    libraryId = coursePlayerData.libraryId,
+                    onBackClick = { currentNavController.popBackStack() },
+                    onMessageClick = {},
+                    onIntent = viewModel::processIntent
                 )
 
             }

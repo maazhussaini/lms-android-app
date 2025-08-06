@@ -7,6 +7,7 @@ import com.example.orb_ed.domain.model.CourseTopic
 import com.example.orb_ed.domain.model.CourseVideo
 import com.example.orb_ed.domain.model.Program
 import com.example.orb_ed.domain.model.Specialization
+import com.example.orb_ed.domain.model.VideoDetails
 import kotlinx.coroutines.flow.Flow
 import kotlin.Result
 
@@ -29,4 +30,6 @@ interface CourseRepository {
     suspend fun getCourseTopicsByModule(moduleId: Int): Flow<Result<List<CourseTopic>>>
 
     suspend fun getCourseVideosByTopic(topicId: Int): Flow<Result<List<CourseVideo>>>
+
+    suspend fun getVideoDetailsById(videoId: Int): Flow<Result<VideoDetails>>
 }
