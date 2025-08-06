@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.orb_ed.domain.usecase.course.GetCourseBasicDetailsUseCase
 import com.example.orb_ed.domain.usecase.course.GetCourseModulesUseCase
+import com.example.orb_ed.domain.usecase.course.GetCourseTopicsByModuleUseCase
 import com.example.orb_ed.presentation.navigation.CourseDetail
 import com.example.orb_ed.util.Constants.VIDEO_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,28 +24,12 @@ class CourseDetailViewModel @Inject constructor(
     state: SavedStateHandle,
     private val getCourseBasicDetailsUseCase: GetCourseBasicDetailsUseCase,
     private val getCourseModulesUseCase: GetCourseModulesUseCase,
+    private val getCourseTopicsByModuleUseCase: GetCourseTopicsByModuleUseCase
 ) : ViewModel() {
 
     val data = state.toRoute<CourseDetail>()
     private val _state = MutableStateFlow(
         CourseDetailState(
-            listOfTopics = listOf(
-                Topic(1, "Introduction", 3),
-                Topic(2, "Basics", 5),
-                Topic(3, "Advanced", 4),
-                Topic(4, "Final Project", 2),
-                Topic(5, "Review", 1),
-                Topic(6, "Certification", 1),
-                Topic(7, "Q&A", 2),
-                Topic(8, "Bonus Content", 1),
-                Topic(9, "Community", 1),
-                Topic(10, "Additional Resources", 1),
-                Topic(11, "Career Support", 1),
-                Topic(12, "Feedback", 1),
-                Topic(13, "Next Steps", 1),
-                Topic(14, "Graduation", 1),
-                Topic(15, "Alumni Network", 1)
-            ),
             listOfVideoLectures = listOf(
                 VideoLecture(1, "Video 1", "15 Mins", VIDEO_ID, "Completed", false),
                 VideoLecture(2, "Video 2", "15 Mins", VIDEO_ID, "Pending", true),
@@ -107,12 +92,38 @@ class CourseDetailViewModel @Inject constructor(
     }
 
     fun onModuleSelected(moduleId: Int) {
-        _state.update { it.copy(selectedModule = moduleId) }
+        _state.update {
+            it.copy(
+                selectedModule = moduleId,
+                listOfTopics = if (moduleId > 0) it.listOfTopics else emptyList()
+            )
+        }
 
+        if (moduleId > 0)
+            viewModelScope.launch {
+                getCourseTopicsByModuleUseCase.invoke(moduleId).collect { result ->
+                    result.onSuccess { topics ->
+                        _state.update { currentState ->
+                            currentState.copy(
+                                listOfTopics = topics
+                            )
+                        }
+                    }.onFailure { exception ->
+                        // Handle error state, you might want to update the UI to show an error
+                        // For now, we'll just log the error
+                        println("Error fetching course topics: ${exception.message}")
+                    }
+                }
+            }
     }
 
     fun onTopicSelected(topicId: Int) {
-        _state.update { it.copy(selectedTopic = topicId) }
+        _state.update {
+            it.copy(
+                selectedTopic = topicId,
+                listOfVideoLectures = if (topicId > 0) it.listOfVideoLectures else emptyList()
+            )
+        }
 
     }
 }

@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.orb_ed.R
 import com.example.orb_ed.domain.model.CourseModule
+import com.example.orb_ed.domain.model.CourseTopic
 import com.example.orb_ed.presentation.components.CategoryTabs
 import com.example.orb_ed.presentation.components.ProgressWithLabel
 import com.example.orb_ed.presentation.screens.courses.InitialsCircleAvatar
@@ -70,23 +71,6 @@ fun CourseDetailScreenPreview() {
                 progress = 0.3276f,
                 programName = "Machine Learning",
                 specializationName = "Data Science",
-                listOfTopics = listOf(
-                    Topic(1, "Introduction", 3),
-                    Topic(2, "Basics", 5),
-                    Topic(3, "Advanced", 4),
-                    Topic(4, "Final Project", 2),
-                    Topic(5, "Review", 1),
-                    Topic(6, "Certification", 1),
-                    Topic(7, "Q&A", 2),
-                    Topic(8, "Bonus Content", 1),
-                    Topic(9, "Community", 1),
-                    Topic(10, "Additional Resources", 1),
-                    Topic(11, "Career Support", 1),
-                    Topic(12, "Feedback", 1),
-                    Topic(13, "Next Steps", 1),
-                    Topic(14, "Graduation", 1),
-                    Topic(15, "Alumni Network", 1)
-                ),
                 listOfVideoLectures = listOf(
                     VideoLecture(1, "Video 1", "15 Mins", "", "Completed", false),
                     VideoLecture(2, "Video 2", "15 Mins", "", "Pending", true),
@@ -475,12 +459,12 @@ fun List<CourseModule>.toModuleItemModels(): List<ItemModel> {
     }
 }
 
-fun List<Topic>.toTopicItemModels(): List<ItemModel> {
+fun List<CourseTopic>.toTopicItemModels(): List<ItemModel> {
     return this.map {
         ItemModel(
-            itemType = ItemType.topic(it.topicId),
-            title = it.topicName,
-            subTitle = "${it.noOfVideoLectures} Video Lectures",
+            itemType = ItemType.topic(it.id),
+            title = it.name,
+            subTitle = it.videoLectures,
         )
     }
 }
