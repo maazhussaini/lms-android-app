@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.orb_ed.R
+import com.example.orb_ed.domain.model.CourseModule
 import com.example.orb_ed.presentation.components.CategoryTabs
 import com.example.orb_ed.presentation.components.ProgressWithLabel
 import com.example.orb_ed.presentation.screens.courses.InitialsCircleAvatar
@@ -69,23 +70,6 @@ fun CourseDetailScreenPreview() {
                 progress = 0.3276f,
                 programName = "Machine Learning",
                 specializationName = "Data Science",
-                listOfModules = listOf(
-                    Module(1, "Module 1", 5, 3),
-                    Module(2, "Module 2", 4, 2),
-                    Module(3, "Module 3", 6, 4),
-                    Module(4, "Module 4", 3, 2),
-                    Module(5, "Module 5", 4, 3),
-                    Module(6, "Module 6", 5, 3),
-                    Module(7, "Module 7", 4, 2),
-                    Module(8, "Module 8", 5, 3),
-                    Module(9, "Module 9", 4, 2),
-                    Module(10, "Module 10", 6, 4),
-                    Module(11, "Module 11", 3, 2),
-                    Module(12, "Module 12", 4, 3),
-                    Module(13, "Module 13", 5, 3),
-                    Module(14, "Module 14", 4, 2),
-                    Module(15, "Module 15", 6, 4),
-                ),
                 listOfTopics = listOf(
                     Topic(1, "Introduction", 3),
                     Topic(2, "Basics", 5),
@@ -481,12 +465,12 @@ fun ListingItem(itemModel: ItemModel, onItemClick: (Int, String?) -> Unit) {
 
 }
 
-fun List<Module>.toModuleItemModels(): List<ItemModel> {
+fun List<CourseModule>.toModuleItemModels(): List<ItemModel> {
     return this.map {
         ItemModel(
-            itemType = ItemType.module(it.moduleId),
-            title = it.moduleName,
-            subTitle = "${it.noOfTopics} Topics | ${it.noOfVideoLectures} Video Lectures",
+            itemType = ItemType.module(it.id),
+            title = it.name,
+            subTitle = it.stats,
         )
     }
 }

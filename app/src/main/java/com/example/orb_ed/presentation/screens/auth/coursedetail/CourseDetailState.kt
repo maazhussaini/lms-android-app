@@ -1,5 +1,7 @@
 package com.example.orb_ed.presentation.screens.auth.coursedetail
 
+import com.example.orb_ed.domain.model.CourseModule
+
 data class CourseDetailState(
     val profilePictureUrl: String? = null,
     val courseName: String = "",
@@ -12,7 +14,7 @@ data class CourseDetailState(
     val specializationName: String = "",
     val selectedTopic: Int = 0,
     val selectedModule: Int = 0,
-    val listOfModules: List<Module> = emptyList(),
+    val listOfModules: List<CourseModule> = emptyList(),
     val listOfTopics: List<Topic> = emptyList(),
     val listOfVideoLectures: List<VideoLecture> = emptyList()
 )

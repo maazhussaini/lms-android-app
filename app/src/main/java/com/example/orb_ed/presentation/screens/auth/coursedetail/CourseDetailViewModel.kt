@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.orb_ed.domain.usecase.course.GetCourseBasicDetailsUseCase
+import com.example.orb_ed.domain.usecase.course.GetCourseModulesUseCase
 import com.example.orb_ed.presentation.navigation.CourseDetail
 import com.example.orb_ed.util.Constants.VIDEO_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,29 +21,13 @@ import javax.inject.Inject
 @HiltViewModel
 class CourseDetailViewModel @Inject constructor(
     state: SavedStateHandle,
-    private val getCourseBasicDetails: GetCourseBasicDetailsUseCase,
+    private val getCourseBasicDetailsUseCase: GetCourseBasicDetailsUseCase,
+    private val getCourseModulesUseCase: GetCourseModulesUseCase,
 ) : ViewModel() {
 
     val data = state.toRoute<CourseDetail>()
     private val _state = MutableStateFlow(
         CourseDetailState(
-            listOfModules = listOf(
-                Module(1, "Module 1", 5, 3),
-                Module(2, "Module 2", 4, 2),
-                Module(3, "Module 3", 6, 4),
-                Module(4, "Module 4", 3, 2),
-                Module(5, "Module 5", 4, 3),
-                Module(6, "Module 6", 5, 3),
-                Module(7, "Module 7", 4, 2),
-                Module(8, "Module 8", 5, 3),
-                Module(9, "Module 9", 4, 2),
-                Module(10, "Module 10", 6, 4),
-                Module(11, "Module 11", 3, 2),
-                Module(12, "Module 12", 4, 3),
-                Module(13, "Module 13", 5, 3),
-                Module(14, "Module 14", 4, 2),
-                Module(15, "Module 15", 6, 4),
-            ),
             listOfTopics = listOf(
                 Topic(1, "Introduction", 3),
                 Topic(2, "Basics", 5),
@@ -76,7 +61,7 @@ class CourseDetailViewModel @Inject constructor(
     }
 
     suspend fun getCourseBasicDetails() = withContext(Dispatchers.IO) {
-        getCourseBasicDetails.invoke(data.courseId).collect { result ->
+        getCourseBasicDetailsUseCase.invoke(data.courseId).collect { result ->
             result.onSuccess { courseDetails ->
                 _state.update { currentState ->
                     currentState.copy(
@@ -96,6 +81,21 @@ class CourseDetailViewModel @Inject constructor(
                 // For now, we'll just log the error
                 println("Error fetching course details: ${exception.message}")
             }
+        }
+
+        getCourseModulesUseCase.invoke(data.courseId).collect { result ->
+            result.onSuccess { modules ->
+                _state.update { currentState ->
+                    currentState.copy(
+                        listOfModules = modules
+                    )
+                }
+            }.onFailure { exception ->
+                // Handle error state, you might want to update the UI to show an error
+                // For now, we'll just log the error
+                println("Error fetching course modules: ${exception.message}")
+            }
+
         }
     }
 

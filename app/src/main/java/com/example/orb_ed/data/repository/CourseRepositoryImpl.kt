@@ -5,6 +5,7 @@ import com.example.orb_ed.data.manager.TokenManager
 import com.example.orb_ed.data.remote.api.CourseApiService
 import com.example.orb_ed.domain.model.Course
 import com.example.orb_ed.domain.model.CourseBasicDetails
+import com.example.orb_ed.domain.model.CourseModule
 import com.example.orb_ed.domain.model.Program
 import com.example.orb_ed.domain.model.Specialization
 import com.example.orb_ed.domain.repository.CourseRepository
@@ -23,6 +24,34 @@ class CourseRepositoryImpl @Inject constructor(
     private val tokenManager: TokenManager
 ) : CourseRepository {
 //    private val sampleCourses = courseLists
+
+    override suspend fun getCourseModules(courseId: Int): Flow<Result<List<CourseModule>>> = flow {
+        try {
+            val token = tokenManager.accessToken
+            if (token == null) {
+                emit(Result.failure(Exception("User not authenticated")))
+                return@flow
+            }
+
+            val response = api.getCourseModules(courseId, "Bearer $token")
+
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body?.success == true) {
+                    val modules = body.data.items.map { it.toCourseModule() }
+                    emit(Result.success(modules))
+                } else {
+                    emit(Result.failure(Exception(body?.message ?: "Unknown error")))
+                }
+            } else {
+                val errorBody = response.errorBody()?.string()
+                emit(Result.failure(Exception("Failed to fetch course modules: $errorBody")))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting course modules", e)
+            emit(Result.failure(e))
+        }
+    }
 
     override suspend fun getCourseBasicDetails(courseId: Int): Flow<Result<CourseBasicDetails>> =
         flow {
