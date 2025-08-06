@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.orb_ed.data.manager.TokenManager
 import com.example.orb_ed.data.remote.api.CourseApiService
 import com.example.orb_ed.domain.model.Course
+import com.example.orb_ed.domain.model.CourseBasicDetails
 import com.example.orb_ed.domain.model.Program
 import com.example.orb_ed.domain.model.Specialization
 import com.example.orb_ed.domain.repository.CourseRepository
@@ -22,6 +23,51 @@ class CourseRepositoryImpl @Inject constructor(
     private val tokenManager: TokenManager
 ) : CourseRepository {
 //    private val sampleCourses = courseLists
+
+    override suspend fun getCourseBasicDetails(courseId: Int): Flow<Result<CourseBasicDetails>> =
+        flow {
+            try {
+                val token = tokenManager.accessToken
+                if (token.isNullOrEmpty()) {
+                    Log.d(TAG, "No access token available")
+                    emit(Result.failure(Exception("Not authenticated")))
+                    return@flow
+                }
+
+                val response = api.getCourseBasicDetails(
+                    courseId = courseId,
+                    authToken = "Bearer $token"
+                )
+
+                if (response.isSuccessful) {
+                    val courseDetails = response.body()?.data?.toCourseBasicDetails()
+                    if (courseDetails != null) {
+                        Log.d(TAG, "Successfully fetched course details for course $courseId")
+                        emit(Result.success(courseDetails))
+                    } else {
+                        Log.e(TAG, "Failed to parse course details response")
+                        emit(Result.failure(Exception("Failed to parse course details")))
+                    }
+                } else {
+                    val errorMessage =
+                        "Failed to fetch course details: ${response.code()} - ${response.message()}"
+                    Log.e(TAG, errorMessage)
+                    emit(Result.failure(Exception(errorMessage)))
+                }
+            } catch (e: IOException) {
+                val errorMessage = "Network error while fetching course details"
+                Log.e(TAG, errorMessage, e)
+                emit(Result.failure(Exception(errorMessage, e)))
+            } catch (e: HttpException) {
+                val errorMessage = "HTTP error while fetching course details"
+                Log.e(TAG, errorMessage, e)
+                emit(Result.failure(Exception(errorMessage, e)))
+            } catch (e: Exception) {
+                val errorMessage = "Unexpected error while fetching course details"
+                Log.e(TAG, errorMessage, e)
+                emit(Result.failure(Exception(errorMessage, e)))
+            }
+        }
 
     override suspend fun getEnrolledCourses(): Flow<List<Course>> = flow {
         try {

@@ -1,5 +1,6 @@
 package com.example.orb_ed.data.remote.api
 
+import com.example.orb_ed.data.remote.dto.CourseBasicDetailsApiResponse
 import com.example.orb_ed.data.remote.dto.DiscoveredCoursesResponse
 import com.example.orb_ed.data.remote.dto.EnrolledCoursesResponse
 import com.example.orb_ed.data.remote.dto.ProgramsResponse
@@ -7,6 +8,7 @@ import com.example.orb_ed.data.remote.dto.SpecializationsResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface CourseApiService {
@@ -49,6 +51,12 @@ interface CourseApiService {
         @Query("include_progress") includeProgress: Boolean = true,
         @Header("Authorization") authToken: String
     ): Response<EnrolledCoursesResponse>
+
+    @GET("student/profile/courses/{courseId}/basic-details")
+    suspend fun getCourseBasicDetails(
+        @Path("courseId") courseId: Int,
+        @Header("Authorization") authToken: String
+    ): Response<CourseBasicDetailsApiResponse>
 }
 
 /*data class CoursesData(

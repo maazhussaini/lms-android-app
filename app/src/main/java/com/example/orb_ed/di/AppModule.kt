@@ -2,6 +2,8 @@ package com.example.orb_ed.di
 
 import com.example.orb_ed.data.manager.TokenManager
 import com.example.orb_ed.data.remote.interceptor.AuthInterceptor
+import com.example.orb_ed.domain.repository.AuthRepository
+import com.example.orb_ed.domain.usecase.auth.LoginUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,7 +31,7 @@ object AppModule {
      */
     @Provides
     @Singleton
-    fun provideLoginUseCase(authRepository: com.example.orb_ed.domain.repository.AuthRepository): com.example.orb_ed.domain.usecase.auth.LoginUseCase {
-        return com.example.orb_ed.domain.usecase.auth.LoginUseCase(authRepository)
+    fun provideLoginUseCase(authRepository: AuthRepository): com.example.orb_ed.domain.usecase.auth.LoginUseCase {
+        return LoginUseCase(authRepository)
     }
 }

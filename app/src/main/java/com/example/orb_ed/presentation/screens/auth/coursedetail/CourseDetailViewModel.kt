@@ -1,30 +1,31 @@
 package com.example.orb_ed.presentation.screens.auth.coursedetail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.example.orb_ed.domain.usecase.course.GetProgramsUseCase
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
+import com.example.orb_ed.domain.usecase.course.GetCourseBasicDetailsUseCase
+import com.example.orb_ed.presentation.navigation.CourseDetail
 import com.example.orb_ed.util.Constants.VIDEO_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class CourseDetailViewModel @Inject constructor(
-    private val getProgramsUseCase: GetProgramsUseCase,
+    state: SavedStateHandle,
+    private val getCourseBasicDetails: GetCourseBasicDetailsUseCase,
 ) : ViewModel() {
 
+    val data = state.toRoute<CourseDetail>()
     private val _state = MutableStateFlow(
         CourseDetailState(
-            courseName = "Introduction to Python",
-            courseDescription = "Business course covering fundamentals of management and strategy.",
-            courseDuration = "May 2025 - July 2025",
-            teacherName = "Chris Evans",
-            coursePrice = "Buy: $29",
-            progress = 0.3276f,
-            programName = "Machine Learning",
-            specializationName = "Data Science",
             listOfModules = listOf(
                 Module(1, "Module 1", 5, 3),
                 Module(2, "Module 2", 4, 2),
@@ -64,11 +65,39 @@ class CourseDetailViewModel @Inject constructor(
                 VideoLecture(2, "Video 2", "15 Mins", VIDEO_ID, "Pending", true),
                 VideoLecture(3, "Video 3", "15 Mins", VIDEO_ID, "Incomplete", true),
             ),
-            selectedTopic = 0,
-            selectedModule = 0
         )
     )
     val state: StateFlow<CourseDetailState> = _state.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            getCourseBasicDetails()
+        }
+    }
+
+    suspend fun getCourseBasicDetails() = withContext(Dispatchers.IO) {
+        getCourseBasicDetails.invoke(data.courseId).collect { result ->
+            result.onSuccess { courseDetails ->
+                _state.update { currentState ->
+                    currentState.copy(
+                        profilePictureUrl = courseDetails.teacherProfilePicture,
+                        courseName = courseDetails.title,
+                        courseDescription = courseDetails.description,
+                        courseDuration = "${courseDetails.startDate} - ${courseDetails.endDate}",
+                        teacherName = courseDetails.teacherName,
+                        coursePrice = courseDetails.purchaseStatus,
+                        progress = courseDetails.progress,
+                        programName = courseDetails.programName,
+                        specializationName = courseDetails.specializationName
+                    )
+                }
+            }.onFailure { exception ->
+                // Handle error state, you might want to update the UI to show an error
+                // For now, we'll just log the error
+                println("Error fetching course details: ${exception.message}")
+            }
+        }
+    }
 
     fun processIntent(intent: CourseDetailIntent) {
         when (intent) {
