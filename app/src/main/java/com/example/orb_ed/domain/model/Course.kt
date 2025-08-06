@@ -1,7 +1,7 @@
 package com.example.orb_ed.domain.model
 
 data class Course(
-    val id: String,
+    val id: Int,
     val title: String,
     val description: String,
     val thumbnailUrl: String,

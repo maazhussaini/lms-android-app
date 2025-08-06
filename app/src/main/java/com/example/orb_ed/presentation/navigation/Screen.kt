@@ -36,6 +36,9 @@ data class OTP(val email: String)
 data class CoursePlayer(val videoId: String, val libraryId: Long)
 
 @Serializable
+data class CourseDetail(val courseId: Int)
+
+@Serializable
 object CoursesDashboard
 
 @Serializable

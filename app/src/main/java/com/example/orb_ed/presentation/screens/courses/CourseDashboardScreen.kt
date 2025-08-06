@@ -12,18 +12,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.orb_ed.R
@@ -33,7 +34,6 @@ import com.example.orb_ed.presentation.components.SearchBar
 import com.example.orb_ed.presentation.theme.GreySubtitleColor
 import com.example.orb_ed.presentation.theme.LightPurpleBackgroundColor
 import com.example.orb_ed.presentation.theme.PrimaryColor
-import com.example.orb_ed.util.Constants.VIDEO_ID
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -43,7 +43,7 @@ fun CourseDashboardScreen(
     effect: Flow<CourseDashboardEffect>,
     onIntent: (CourseDashboardIntent) -> Unit,
     onNavigateBack: () -> Unit = {},
-    onCourseClick: (String) -> Unit = {}
+    onCourseClick: (Int) -> Unit = {}
 ) {
 
     Column(
@@ -88,17 +88,22 @@ fun CourseDashboardScreen(
             )
 
             if (state.selectedTabIndex == 0) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
                     if (state.selectedSpecializationIndex > -1 || state.selectedProgramIndex > -1)
                         Icon(
-                            modifier = Modifier.clickable {
-                                if (state.selectedSpecializationIndex > -1) {
-                                    onIntent(CourseDashboardIntent.SpecializationSelected(-1))
-                                } else {
-                                    onIntent(CourseDashboardIntent.ProgramSelected(-1))
-                                }
-                            },
-                            imageVector = Icons.Default.ArrowBackIosNew,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable {
+                                    if (state.selectedSpecializationIndex > -1) {
+                                        onIntent(CourseDashboardIntent.SpecializationSelected(-1))
+                                    } else {
+                                        onIntent(CourseDashboardIntent.ProgramSelected(-1))
+                                    }
+                                },
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                             contentDescription = null
                         )
 
@@ -159,7 +164,7 @@ fun CourseDashboardScreen(
 
         if (state.selectedTabIndex == 0 || state.selectedTabIndex == 1)
             CourseCardGrid(if (state.selectedTabIndex == 0) state.discoverCourses else state.enrolledCourses) {
-                onCourseClick(VIDEO_ID)
+                onCourseClick(it.id)
             }
         else {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {

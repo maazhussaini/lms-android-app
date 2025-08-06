@@ -34,7 +34,7 @@ data class DiscoveredCourseDto(
     val isFree: Boolean
 ) {
     fun toDomain(): Course = Course(
-        id = id.toString(),
+        id = id,
         title = name,
         description = "$programName • $teacherName • $startDate - $endDate",
         thumbnailUrl = "", // You might want to add a default course image

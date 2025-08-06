@@ -8,8 +8,9 @@ object Constants {
     const val BASE_URL = "https://student.skonzify.com/api/v1/"
     const val API_TIMEOUT = 30L // seconds
 
-    const val VIDEO_ID = "687638e9-deb7-4882-9380-dea9065efc70"
+    const val VIDEO_ID = "6499d1b5-2bee-4843-9b66-2809f2627f02"
     const val LIBRARY_ID = 459051L
+    const val ACCESS_KEY = "cebff89b-1357-4016-8cf1ede98059-5f31-465a"
 
     // Authentication
     const val TOKEN_TYPE_BEARER = "Bearer"

@@ -27,7 +27,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.orb_ed.presentation.screens.auth.coursedetail.CourseDetailScreen
+import com.example.orb_ed.presentation.screens.auth.coursedetail.CourseDetailViewModel
 import com.example.orb_ed.presentation.screens.auth.courseplayer.CoursePlayerScreen
+import com.example.orb_ed.presentation.screens.auth.courseplayer.CoursePlayerState
 import com.example.orb_ed.presentation.screens.courses.CourseDashboardScreen
 import com.example.orb_ed.presentation.screens.courses.CourseDashboardViewModel
 import com.example.orb_ed.presentation.theme.PrimaryColor
@@ -102,8 +105,9 @@ fun BottomNavScaffold(
 
                 CourseDashboardScreen(
                     onNavigateBack = { /* Handle back navigation if needed */ },
-                    onCourseClick = { videoId ->
-                        currentNavController.navigate(CoursePlayer(videoId, LIBRARY_ID))
+                    onCourseClick = { courseId ->
+                        currentNavController.navigate(CourseDetail(courseId))
+//                        currentNavController.navigate(CoursePlayer(videoId, LIBRARY_ID))
                     },
                     state = state,
                     effect = viewModel.effect,
@@ -111,9 +115,37 @@ fun BottomNavScaffold(
                 )
             }
 
+            composable<CourseDetail> {
+                val viewModel = hiltViewModel<CourseDetailViewModel>()
+                val state by viewModel.state.collectAsStateWithLifecycle()
+                val args = it.toRoute<CourseDetail>()
+                CourseDetailScreen(
+                    uiState = state,
+                    onIntent = viewModel::processIntent,
+                    onBackClick = { currentNavController.popBackStack() },
+                    onMessageClick = {},
+                    onVideoClick = {
+                        currentNavController.navigate(CoursePlayer(it, LIBRARY_ID))
+                    }
+                )
+            }
+
             composable<CoursePlayer> {
                 val coursePlayerData = it.toRoute<CoursePlayer>()
                 CoursePlayerScreen(
+                    uiState = CoursePlayerState(
+                        profilePictureUrl = null,
+                        teacherName = "Chris Evans",
+                        teacherDesignation = "Computer Science Professor",
+                        moduleNumber = 1,
+                        moduleName = "Computer Science",
+                        lectureNumber = 1,
+                        lectureName = "Basic Programming",
+                        previousLectureName = null,
+                        nextLectureName = null,
+                        previousLectureDuration = null,
+                        nextLectureDuration = null
+                    ),
                     videoId = coursePlayerData.videoId,
                     libraryId = coursePlayerData.libraryId
                 )

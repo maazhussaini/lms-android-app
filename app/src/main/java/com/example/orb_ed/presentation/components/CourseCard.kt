@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.orb_ed.domain.model.Course
@@ -77,15 +78,10 @@ fun CourseCardGrid(courseList: List<Course>, onCardClick: (Course) -> Unit) {
                                 .size(20.dp)
                                 .background(color = Color(0xFFF9BAD3), shape = CircleShape)
                         ) {
-                            InitialsCircleAvatar(name = course.teacherName)
-                            /*Image(
-                                modifier = Modifier
-                                    .size(16.dp)
-                                    .clip(CircleShape)
-                                    .align(Alignment.Center),
-                                painter = painterResource(id = course.imageResId),
-                                contentDescription = null
-                            )*/
+                            InitialsCircleAvatar(
+                                name = course.teacherName,
+                                modifier = Modifier.size(16.dp)
+                            )
                         }
 
                         Column {
@@ -176,7 +172,11 @@ fun CourseCardGrid(courseList: List<Course>, onCardClick: (Course) -> Unit) {
 }
 
 @Composable
-fun ProgressWithLabel(progress: Float) {
+fun ProgressWithLabel(
+    progress: Float,
+    labelSize: TextUnit = 4.sp,
+    labelColor: Color = GreyHintColor
+) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
@@ -189,7 +189,7 @@ fun ProgressWithLabel(progress: Float) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(6.dp)
+                    .height(7.dp)
                     .clip(RoundedCornerShape(3.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant)
             ) {
@@ -211,8 +211,8 @@ fun ProgressWithLabel(progress: Float) {
                     text = "0%",
                     modifier = Modifier.align(Alignment.CenterStart),
                     style = MaterialTheme.typography.bodySmall.copy(
-                        fontSize = 4.sp,
-                        color = GreyHintColor
+                        fontSize = labelSize,
+                        color = labelColor
                     )
                 )
 
@@ -221,8 +221,8 @@ fun ProgressWithLabel(progress: Float) {
                     text = "100%",
                     modifier = Modifier.align(Alignment.CenterEnd),
                     style = MaterialTheme.typography.bodySmall.copy(
-                        fontSize = 4.sp,
-                        color = GreyHintColor
+                        fontSize = labelSize,
+                        color = labelColor
                     )
                 )
 
@@ -233,8 +233,8 @@ fun ProgressWithLabel(progress: Float) {
                         .offset(x = progressPosition - 10.dp) // adjust for label width
                         .align(Alignment.CenterStart),
                     style = MaterialTheme.typography.bodySmall.copy(
-                        fontSize = 4.sp,
-                        color = GreyHintColor
+                        fontSize = labelSize,
+                        color = labelColor
                     )
                 )
             }

@@ -37,7 +37,7 @@ data class EnrolledCourseDto(
 ) {
     fun toCourse(): Course {
         return Course(
-            id = courseId.toString(),
+            id = courseId,
             title = courseName,
             description = "$programName - $specializationName\nDuration: $startDate to $endDate\nTotal Hours: $totalHours",
             thumbnailUrl = teacherProfilePicture ?: "",
