@@ -7,8 +7,8 @@ import androidx.navigation.toRoute
 import com.example.orb_ed.domain.usecase.course.GetCourseBasicDetailsUseCase
 import com.example.orb_ed.domain.usecase.course.GetCourseModulesUseCase
 import com.example.orb_ed.domain.usecase.course.GetCourseTopicsByModuleUseCase
+import com.example.orb_ed.domain.usecase.course.GetCourseVideosByTopicUseCase
 import com.example.orb_ed.presentation.navigation.CourseDetail
-import com.example.orb_ed.util.Constants.VIDEO_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,18 +24,13 @@ class CourseDetailViewModel @Inject constructor(
     state: SavedStateHandle,
     private val getCourseBasicDetailsUseCase: GetCourseBasicDetailsUseCase,
     private val getCourseModulesUseCase: GetCourseModulesUseCase,
-    private val getCourseTopicsByModuleUseCase: GetCourseTopicsByModuleUseCase
+    private val getCourseTopicsByModuleUseCase: GetCourseTopicsByModuleUseCase,
+    private val getCourseVideosByTopicUseCase: GetCourseVideosByTopicUseCase
 ) : ViewModel() {
 
     val data = state.toRoute<CourseDetail>()
     private val _state = MutableStateFlow(
-        CourseDetailState(
-            listOfVideoLectures = listOf(
-                VideoLecture(1, "Video 1", "15 Mins", VIDEO_ID, "Completed", false),
-                VideoLecture(2, "Video 2", "15 Mins", VIDEO_ID, "Pending", true),
-                VideoLecture(3, "Video 3", "15 Mins", VIDEO_ID, "Incomplete", true),
-            ),
-        )
+        CourseDetailState()
     )
     val state: StateFlow<CourseDetailState> = _state.asStateFlow()
 
@@ -123,6 +118,25 @@ class CourseDetailViewModel @Inject constructor(
                 selectedTopic = topicId,
                 listOfVideoLectures = if (topicId > 0) it.listOfVideoLectures else emptyList()
             )
+        }
+
+        if (topicId > 0) {
+            viewModelScope.launch {
+                getCourseVideosByTopicUseCase.invoke(topicId).collect { result ->
+                    result.onSuccess { videos ->
+                        _state.update { currentState ->
+                            currentState.copy(
+                                listOfVideoLectures = videos
+                            )
+                        }
+                    }.onFailure { exception ->
+                        // Handle error state, you might want to update the UI to show an error
+                        // For now, we'll just log the error
+                        println("Error fetching course videos: ${exception.message}")
+                    }
+                }
+
+            }
         }
 
     }

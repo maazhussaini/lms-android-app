@@ -3,6 +3,7 @@ package com.example.orb_ed.data.remote.api
 import com.example.orb_ed.data.remote.dto.CourseBasicDetailsApiResponse
 import com.example.orb_ed.data.remote.dto.CourseModulesResponse
 import com.example.orb_ed.data.remote.dto.CourseTopicsResponse
+import com.example.orb_ed.data.remote.dto.CourseVideosResponse
 import com.example.orb_ed.data.remote.dto.DiscoveredCoursesResponse
 import com.example.orb_ed.data.remote.dto.EnrolledCoursesResponse
 import com.example.orb_ed.data.remote.dto.ProgramsResponse
@@ -25,6 +26,12 @@ interface CourseApiService {
         @Path("moduleId") moduleId: Int,
         @Header("Authorization") authToken: String
     ): Response<CourseTopicsResponse>
+
+    @GET("topics/{topicId}/videos")
+    suspend fun getCourseVideosByTopic(
+        @Path("topicId") topicId: Int,
+        @Header("Authorization") authToken: String
+    ): Response<CourseVideosResponse>
     
     /*@GET("courses/enrolled")
     suspend fun getEnrolledCourses(): Response<ApiResponse<CoursesData>>

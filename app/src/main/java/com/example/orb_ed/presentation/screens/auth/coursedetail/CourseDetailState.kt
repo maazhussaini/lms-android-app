@@ -2,6 +2,7 @@ package com.example.orb_ed.presentation.screens.auth.coursedetail
 
 import com.example.orb_ed.domain.model.CourseModule
 import com.example.orb_ed.domain.model.CourseTopic
+import com.example.orb_ed.domain.model.CourseVideo
 
 data class CourseDetailState(
     val profilePictureUrl: String? = null,
@@ -17,7 +18,7 @@ data class CourseDetailState(
     val selectedModule: Int = 0,
     val listOfModules: List<CourseModule> = emptyList(),
     val listOfTopics: List<CourseTopic> = emptyList(),
-    val listOfVideoLectures: List<VideoLecture> = emptyList()
+    val listOfVideoLectures: List<CourseVideo> = emptyList()
 )
 
 data class VideoLecture(

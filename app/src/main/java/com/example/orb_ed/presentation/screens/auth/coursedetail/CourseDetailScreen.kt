@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import com.example.orb_ed.R
 import com.example.orb_ed.domain.model.CourseModule
 import com.example.orb_ed.domain.model.CourseTopic
+import com.example.orb_ed.domain.model.CourseVideo
 import com.example.orb_ed.presentation.components.CategoryTabs
 import com.example.orb_ed.presentation.components.ProgressWithLabel
 import com.example.orb_ed.presentation.screens.courses.InitialsCircleAvatar
@@ -55,6 +56,7 @@ import com.example.orb_ed.presentation.theme.PrimaryColor
 import com.example.orb_ed.presentation.theme.PurchasedTagBackgroundColor
 import com.example.orb_ed.presentation.theme.PurchasedTagColor
 import com.example.orb_ed.presentation.theme.UnLockColor
+import com.example.orb_ed.util.Constants.VIDEO_ID
 
 
 @Preview(showBackground = true)
@@ -71,11 +73,6 @@ fun CourseDetailScreenPreview() {
                 progress = 0.3276f,
                 programName = "Machine Learning",
                 specializationName = "Data Science",
-                listOfVideoLectures = listOf(
-                    VideoLecture(1, "Video 1", "15 Mins", "", "Completed", false),
-                    VideoLecture(2, "Video 2", "15 Mins", "", "Pending", true),
-                    VideoLecture(3, "Video 3", "15 Mins", "", "Incomplete", true),
-                ),
                 selectedTopic = 1,
                 selectedModule = 1
             ), onIntent = {}, onBackClick = {}, onMessageClick = {}, onVideoClick = {}
@@ -91,7 +88,7 @@ fun CourseDetailScreen(
     onIntent: (CourseDetailIntent) -> Unit,
     onBackClick: () -> Unit,
     onMessageClick: () -> Unit,
-    onVideoClick: (String) -> Unit
+    onVideoClick: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -314,13 +311,12 @@ fun CourseDetailScreen(
             ) {
                 items(itemModelList) { item ->
                     ListingItem(item) { itemId, videoId ->
-                        if (videoId != null) {
-                            onVideoClick(videoId)
-                        } else {
-                            if (item.itemType is ItemType.module)
-                                onIntent(CourseDetailIntent.ModuleSelected(itemId))
-                            else if (item.itemType is ItemType.topic)
-                                onIntent(CourseDetailIntent.TopicSelected(itemId))
+                        if (item.itemType is ItemType.module)
+                            onIntent(CourseDetailIntent.ModuleSelected(itemId))
+                        else if (item.itemType is ItemType.topic)
+                            onIntent(CourseDetailIntent.TopicSelected(itemId))
+                        else {
+                            onVideoClick(itemId)
                         }
                     }
 
@@ -469,14 +465,14 @@ fun List<CourseTopic>.toTopicItemModels(): List<ItemModel> {
     }
 }
 
-fun List<VideoLecture>.toVideoLectureItemModels(): List<ItemModel> {
+fun List<CourseVideo>.toVideoLectureItemModels(): List<ItemModel> {
     return this.map {
         ItemModel(
-            itemType = ItemType.videoLecture(it.videoLectureId, it.videoId),
-            title = it.videoLectureName,
-            subTitle = it.videoLectureDuration,
-            completionStatus = it.videoLectureStatus,
-            isLocked = it.videoLectureIsLocked
+            itemType = ItemType.videoLecture(it.id, VIDEO_ID),
+            title = it.name,
+            subTitle = it.durationFormatted,
+            completionStatus = it.completionStatus,
+            isLocked = it.isVideoLocked
         )
     }
 }

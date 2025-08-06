@@ -33,7 +33,7 @@ data class OTP(val email: String)
 //Starting points from bottom nav bar
 // Screens with arguments
 @Serializable
-data class CoursePlayer(val videoId: String, val libraryId: Long)
+data class CoursePlayer(val videoId: Int, val libraryId: Long)
 
 @Serializable
 data class CourseDetail(val courseId: Int)
